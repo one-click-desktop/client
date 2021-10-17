@@ -1,6 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { ElectronService } from 'ngx-electron'
+
+jest.mock('ngx-electron');
+
+const electronServiceMock = {
+  isElectronApp: jest.fn()
+}
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -11,6 +18,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [{ provide: ElectronService, useValue: electronServiceMock }]
     }).compileComponents();
   });
 
@@ -27,9 +35,11 @@ describe('AppComponent', () => {
   });
 
   it('should render title', () => {
+    electronServiceMock.isElectronApp.mockReturnValue(true);
+
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('one-click-desktop-client app is running!');
+    expect(compiled.querySelector('p')?.textContent).toContain('Electron Application');
   });
 });

@@ -4,8 +4,10 @@
 /dist
 /tmp
 /out-tsc
-# Only exists if Bazel was run
-/bazel-out
+main.js
+src/**/*.js
+!src/karma.conf.js
+*.js.map
 
 # dependencies
 /node_modules

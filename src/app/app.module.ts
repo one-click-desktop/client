@@ -4,10 +4,11 @@ import { NgxElectronModule } from 'ngx-electron';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, NgxElectronModule],
+  imports: [BrowserModule, AppRoutingModule, NgxElectronModule, NgbModule],
   providers: [],
   bootstrap: [AppComponent],
 })

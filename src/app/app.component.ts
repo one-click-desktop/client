@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
@@ -6,7 +6,7 @@ import { ElectronService } from 'ngx-electron';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'one-click-desktop-client';
 
   constructor(private electronService: ElectronService) { }
