@@ -28,5 +28,7 @@ module.exports = {
     testMatch: [
         '<rootDir>/src/app/*.spec.ts',
         '<rootDir>/src/app/**/*.spec.ts'
-    ]
+    ],
+
+    restoreMocks: true
 };
