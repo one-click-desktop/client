@@ -1,4 +1,6 @@
-it('loads examples', () => {
-  cy.visit('/');
-  cy.contains('test1 works');
+describe('My First Test', () => {
+  it('Visits the initial project page', () => {
+    cy.visit('/');
+    cy.contains('Standard Angular Web Application');
+  });
 });

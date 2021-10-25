@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "label": "npm: start",
+      "detail": "Start both web and electron"
+    },
+    {
+      "type": "npm",
+      "script": "ng:serve",
+      "problemMatcher": [],
+      "label": "npm: serve",
+      "detail": "Serve web app"
+    }
+  ]
+}

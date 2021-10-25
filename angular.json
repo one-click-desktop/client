@@ -114,52 +114,22 @@
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
-        "cypress-run": {
-          "builder": "@briebug/cypress-schematic:cypress",
-          "options": {
-            "devServerTarget": "one-click-desktop-client:serve"
-          },
-          "configurations": {
-            "dev": {
-              "browserTarget": "one-click-desktop-client:serve:dev"
-            },
-            "web": {
-              "browserTarget": "one-click-desktop-client:serve:web"
-            },
-            "production": {
-              "browserTarget": "one-click-desktop-client:serve:production"
-            }
-          }
-        },
-        "cypress-open": {
-          "builder": "@briebug/cypress-schematic:cypress",
-          "options": {
-            "devServerTarget": "one-click-desktop-client:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "dev": {
-              "browserTarget": "one-click-desktop-client:serve:dev"
-            },
-            "web": {
-              "browserTarget": "one-click-desktop-client:serve:web"
-            },
-            "production": {
-              "browserTarget": "one-click-desktop-client:serve:production"
-            }
-          }
-        },
         "e2e": {
-          "builder": "@briebug/cypress-schematic:cypress",
+          "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "one-click-desktop-client:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "one-click-desktop-client:serve:dev"
+            },
+            "web": {
+              "browserTarget": "one-click-desktop-client:serve:web"
+            },
             "production": {
-              "devServerTarget": "one-click-desktop-client:serve:production"
+              "browserTarget": "one-click-desktop-client:serve:production"
             }
           }
         }
