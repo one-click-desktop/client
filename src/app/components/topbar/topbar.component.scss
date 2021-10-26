@@ -1,13 +1,13 @@
 @use "sass:math" as math;
 @use "src/app/styles/colors";
 
-$topbar-height: 65px;
-$topbar-padding: 20px;
+$topbar-height: 3.3rem;
+$topbar-padding: 1rem;
 
-$logo-font-size: 35px;
-$nav-font-size: 14px;
-$icon-size: 30px;
-$nav-margin: 40px;
+$logo-font-size: 1.75rem;
+$nav-font-size: 0.75rem;
+$icon-size: 1.5rem;
+$nav-margin: 2rem;
 $nav-items: 3;
 
 .topbar {

@@ -11,7 +11,7 @@ const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 
 function createWindow(): BrowserWindow {
-  const size = { x: 600, y: 400 };
+  const size = { x: 800, y: 600 };
 
   win = new BrowserWindow({
     width: size.x,

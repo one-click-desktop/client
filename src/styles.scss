@@ -7,3 +7,9 @@
 @use "~@fortawesome/fontawesome-free/scss/regular";
 
 @use "app/styles/logo";
+
+html,
+body {
+  height: 100%;
+  font-size: 20px;
+}

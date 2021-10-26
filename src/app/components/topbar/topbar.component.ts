@@ -8,5 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class TopbarComponent {
   constructor() {}
 
-  logOut(): void {}
+  logOut(): void {
+    //TODO: add loginService call
+  }
 }
