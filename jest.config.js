@@ -37,5 +37,6 @@ module.exports = {
         "@testing/(.*)": "<rootDir>/src/app/testing/$1"
     },
 
-    restoreMocks: true
+    restoreMocks: true,
+    clearMocks: true,
 };

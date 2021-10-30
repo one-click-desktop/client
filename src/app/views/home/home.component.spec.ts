@@ -1,35 +1,28 @@
 import { DebugElement } from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MachinesService } from '@services/machines.service';
 import { Chance } from 'chance';
 import { of, throwError } from 'rxjs';
+import { MockedObject } from 'ts-jest/dist/utils/testing';
+import { mocked } from 'ts-jest/utils';
 
 import { HomeComponent } from './home.component';
 
 const chance = new Chance();
 
-jest.useFakeTimers();
+jest.mock('@services/machines.service');
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let debugElement: DebugElement;
-  let machinesService: any;
+  let machinesService: MockedObject<MachinesService>;
 
   beforeEach(async () => {
-    machinesService = {
-      getAvailableMachines: jest.fn((x) => of()),
-    };
-
     await TestBed.configureTestingModule({
       declarations: [HomeComponent],
-      providers: [{ provide: MachinesService, useValue: machinesService }],
+      providers: [MachinesService],
     }).compileComponents();
   });
 
@@ -37,6 +30,9 @@ describe('HomeComponent', () => {
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
+
+    machinesService = mocked(TestBed.inject(MachinesService), false);
+    machinesService.getAvailableMachines.mockImplementation(() => of());
   });
 
   test('should create', () => {
