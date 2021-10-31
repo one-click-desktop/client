@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MachinesService } from '@services/machines.service';
+import { Machines } from '@api-module/model/models';
+import { MachinesService } from '@api-module/api/api';
+import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { setTimeout } from 'timers';
 
 @Component({
@@ -7,33 +10,39 @@ import { setTimeout } from 'timers';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  availableCpu: number = 0;
-  availableGpu: number = 0;
+  machines: Machines[];
 
   canConnect: boolean = false;
   canRefresh: boolean = false;
 
-  constructor(private machinesService: MachinesService) {}
+  loaded: boolean = false;
+
+  constructor(
+    private machinesService: MachinesService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getAvailableMachines();
   }
 
   getAvailableMachines(): void {
+    this.loaded = false;
     this.machinesService
-      .getAvailableMachines()
+      .getMachines()
       .subscribe(
-        (availableMachines) => {
-          this.availableCpu = availableMachines.cpu;
-          this.availableGpu = availableMachines.gpu;
+        (availableMachines: Machines[]) => {
+          this.machines = availableMachines ?? [];
         },
         (_) => {
-          this.availableCpu = this.availableGpu = 0;
+          this.machines = [];
         }
       )
       .add(() => {
-        this.canConnect = !!(this.availableCpu || this.availableGpu);
+        this.canConnect =
+          this.machines?.some((machine) => machine.amount) ?? false;
         setTimeout(() => (this.canRefresh = true), 1000);
+        this.loaded = true;
       });
   }
 
@@ -43,6 +52,9 @@ export class HomeComponent implements OnInit {
   }
 
   connect(): void {
-    //TODO: add implementation
+    const modalRef = this.modalService.open(ConnectModalComponent);
+    modalRef.componentInstance.availableTypes = this.machines?.map(
+      (machine) => machine.type
+    );
   }
 }

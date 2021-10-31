@@ -1,7 +1,8 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MachinesService } from '@services/machines.service';
+import { MachinesService } from '@api-module/api/api';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Chance } from 'chance';
 import { of, throwError } from 'rxjs';
 import { MockedObject } from 'ts-jest/dist/utils/testing';
@@ -11,18 +12,20 @@ import { HomeComponent } from './home.component';
 
 const chance = new Chance();
 
-jest.mock('@services/machines.service');
+jest.mock('@api-module/api/api');
+jest.mock('@ng-bootstrap/ng-bootstrap');
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let debugElement: DebugElement;
   let machinesService: MockedObject<MachinesService>;
+  let modalService: MockedObject<NgbModal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HomeComponent],
-      providers: [MachinesService],
+      providers: [MachinesService, NgbModal],
     }).compileComponents();
   });
 
@@ -32,7 +35,9 @@ describe('HomeComponent', () => {
     debugElement = fixture.debugElement;
 
     machinesService = mocked(TestBed.inject(MachinesService), false);
-    machinesService.getAvailableMachines.mockImplementation(() => of());
+    machinesService.getMachines.mockImplementation(() => of(null));
+
+    modalService = mocked(TestBed.inject(NgbModal), false);
   });
 
   test('should create', () => {
@@ -41,92 +46,56 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  test('should show amount of available cpu machines', () => {
+  test('should show amount of available machines', () => {
     fixture.detectChanges();
 
     const value = chance.natural({ min: 1 });
-    component.availableCpu = value;
+    component.machines = [{ type: 'cpu', amount: value }];
 
     fixture.detectChanges();
 
-    const displayedValue = getValueNativeElement('cpu').textContent;
+    const displayedValue = getValueNativeElement().textContent;
     expect(+displayedValue).toBe(value);
   });
 
-  test('should show amount of available gpu machines', () => {
+  test('should give entry-value class zero if value is falsy', () => {
     fixture.detectChanges();
 
-    const value = chance.natural({ min: 1 });
-    component.availableGpu = value;
-
-    fixture.detectChanges();
-
-    const displayedValue = getValueNativeElement('gpu').textContent;
-    expect(+displayedValue).toBe(value);
-  });
-
-  test('should give cpu entry-value class zero if value is falsy', () => {
-    fixture.detectChanges();
-
-    component.availableCpu = 0;
+    component.machines = [{ type: 'cpu', amount: 0 }];
 
     fixture.detectChanges();
 
-    expect(getValueNativeElement('cpu').classList).toContain(
+    expect(getValueNativeElement().classList).toContain(
       'machines-entry-value-zero'
     );
   });
 
-  test('should give gpu entry-value class zero if value is falsy', () => {
-    fixture.detectChanges();
-
-    component.availableGpu = 0;
-
-    fixture.detectChanges();
-
-    expect(getValueNativeElement('gpu').classList).toContain(
-      'machines-entry-value-zero'
-    );
-  });
-
-  function getValueNativeElement(name: string): any {
-    return debugElement.query(
-      By.css(`.machines-entry-${name} > .machines-entry-value`)
-    ).nativeElement;
+  function getValueNativeElement(): any {
+    return debugElement.query(By.css('.machines-entry > .machines-entry-value'))
+      .nativeElement;
   }
 
-  test('should call machines service on init and save response', () => {
-    const cpuValue = chance.natural({ min: 1 });
-    const gpuValue = chance.natural({ min: 1 });
-    machinesService.getAvailableMachines.mockReturnValueOnce(
-      of({ cpu: cpuValue, gpu: gpuValue })
-    );
+  test('should call getAvailableMachines on init', () => {
+    const spy = jest.spyOn(component, 'getAvailableMachines');
 
     fixture.detectChanges();
 
-    expect(machinesService.getAvailableMachines).toHaveBeenCalled();
-    expect(component.availableCpu).toBe(cpuValue);
-    expect(component.availableGpu).toBe(gpuValue);
+    expect(spy).toHaveBeenCalled();
   });
 
   test('getAvailableMachines should call machines service and save response', () => {
     fixture.detectChanges();
 
-    expect(component.availableCpu).toBe(0);
-    expect(component.availableGpu).toBe(0);
+    const value = chance.natural({ min: 1 });
+    const ret = [{ type: 'cpu', amount: value }];
 
-    const cpuValue = chance.natural({ min: 1 });
-    const gpuValue = chance.natural({ min: 1 });
-    machinesService.getAvailableMachines.mockReturnValueOnce(
-      of({ cpu: cpuValue, gpu: gpuValue })
-    );
+    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
     component.getAvailableMachines();
 
     fixture.detectChanges();
 
-    expect(machinesService.getAvailableMachines).toHaveBeenCalled();
-    expect(component.availableCpu).toBe(cpuValue);
-    expect(component.availableGpu).toBe(gpuValue);
+    expect(machinesService.getMachines).toHaveBeenCalled();
+    expect(component.machines).toBe(ret);
   });
 
   test('should call refresh when clicking refresh button', () => {
@@ -172,27 +141,27 @@ describe('HomeComponent', () => {
     expect(component.canRefresh).toBeFalsy();
   });
 
-  test('should set both values to 0 if subscribe error', () => {
-    component.availableCpu = chance.natural({ min: 1 });
-    component.availableGpu = chance.natural({ min: 1 });
+  test('connect should call ngbModal open', () => {
+    modalService.open.mockReturnValue({
+      componentInstance: { availableTypes: null },
+    } as any);
 
-    expect(component.availableCpu === 0).toBeFalsy();
-    expect(component.availableGpu === 0).toBeFalsy();
+    component.connect();
+    expect(modalService.open).toHaveBeenCalled();
+  });
 
-    machinesService.getAvailableMachines.mockReturnValueOnce(throwError(''));
+  test('should set machines to empty array if subscribe error', () => {
+    machinesService.getMachines.mockReturnValueOnce(throwError(''));
 
     component.getAvailableMachines();
 
-    expect(component.availableCpu).toBe(0);
-    expect(component.availableGpu).toBe(0);
+    expect(component.machines.length).toBe(0);
   });
 
   test('should set canConnect to true if any machine available', () => {
-    const cpuValue = chance.natural({ min: 1 });
-    const gpuValue = chance.natural({ min: 1 });
-    machinesService.getAvailableMachines.mockReturnValueOnce(
-      of({ cpu: cpuValue, gpu: gpuValue })
-    );
+    const value = chance.natural({ min: 1 });
+    const ret = [{ type: 'cpu', amount: value }];
+    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
     component.canConnect = false;
     component.getAvailableMachines();
 
@@ -200,12 +169,39 @@ describe('HomeComponent', () => {
   });
 
   test('should set canConnect to false if no machine available', () => {
-    machinesService.getAvailableMachines.mockReturnValueOnce(
-      of({ cpu: 0, gpu: 0 })
-    );
+    const ret = [{ type: 'cpu', amount: 0 }];
+    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
     component.canConnect = true;
     component.getAvailableMachines();
 
     expect(component.canConnect).toBeFalsy();
+  });
+
+  test('should set canConnect to false if array empty', () => {
+    const ret = [];
+    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+    component.canConnect = true;
+    component.getAvailableMachines();
+
+    expect(component.canConnect).toBeFalsy();
+  });
+
+  test('should show noMachines when no machines returned', () => {
+    machinesService.getMachines.mockImplementationOnce(() => of(null));
+
+    fixture.detectChanges();
+
+    const elem = debugElement.query(By.css('.no-machines'));
+    expect(elem).toBeTruthy();
+  });
+
+  test('should not show noMachines when machines returned', () => {
+    const ret = [{ type: 'cpu', amount: 0 }];
+    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+
+    fixture.detectChanges();
+
+    const elem = debugElement.query(By.css('.no-machines'));
+    expect(elem).toBeFalsy();
   });
 });

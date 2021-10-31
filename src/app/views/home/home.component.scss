@@ -5,7 +5,6 @@ $header-margin-bottom: 0.5rem;
 
 $content-width: 90%;
 $entry-margin: 0.5rem auto;
-$label-width: 76%;
 $button-margin: 0.75rem;
 $value-font-weight: 600;
 
@@ -38,13 +37,13 @@ $value-font-weight: 600;
       margin: $entry-margin;
 
       &-label {
-        text-align: right;
-        width: $label-width;
+        text-align: left;
       }
 
       &-value {
         font-weight: $value-font-weight;
         color: colors.$value-color;
+        text-align: right;
 
         &-zero {
           color: colors.$value-zero-color;
