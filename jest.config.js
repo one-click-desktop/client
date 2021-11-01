@@ -35,7 +35,8 @@ module.exports = {
         "@components/(.*)": "<rootDir>/src/app/components/$1",
         "@services/(.*)": "<rootDir>/src/app/services/$1",
         "@testing/(.*)": "<rootDir>/src/app/testing/$1",
-        "@api-module/(.*)": "<rootDir>/api-module/$1"
+        "@api-module/(.*)": "<rootDir>/api-module/$1",
+        "@constants/(.*)": "<rootDir>/src/app/constants/$1"
     },
 
     restoreMocks: true,

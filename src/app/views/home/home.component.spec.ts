@@ -204,4 +204,20 @@ describe('HomeComponent', () => {
     const elem = debugElement.query(By.css('.no-machines'));
     expect(elem).toBeFalsy();
   });
+
+  test('should set canRefresh to true after REFRESH_COUNTDOWN and not after another', () => {
+    jest.useFakeTimers();
+    component.canRefresh = false;
+
+    component.getAvailableMachines();
+    jest.advanceTimersToNextTimer();
+
+    expect(component.canRefresh).toBeTruthy();
+
+    component.canRefresh = false;
+    jest.advanceTimersToNextTimer();
+
+    expect(component.canRefresh).toBeFalsy();
+    jest.useRealTimers();
+  });
 });

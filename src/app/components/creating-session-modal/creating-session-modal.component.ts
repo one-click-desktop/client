@@ -3,8 +3,7 @@ import { MachineType, Session, SessionStatus } from '@api-module/model/models';
 import { SessionService } from '@api-module/api/api';
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
 import { Subscription, timer } from 'rxjs';
-
-const SESSION_STATUS_WAIT_TIME = 2000;
+import { TimeConstants } from '@constants/time-constants';
 
 @Component({
   selector: 'app-creating-session-modal',
@@ -84,8 +83,8 @@ export class CreatingSessionModalComponent
 
   onSessionPending(): void {
     this.sessionStatus$ = timer(
-      SESSION_STATUS_WAIT_TIME,
-      SESSION_STATUS_WAIT_TIME
+      TimeConstants.SESSION_STATUS_WAIT_TIME,
+      TimeConstants.SESSION_STATUS_WAIT_TIME
     ).subscribe(() => this.getSessionStatus());
   }
 

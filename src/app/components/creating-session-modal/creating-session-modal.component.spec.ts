@@ -7,6 +7,7 @@ import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 import { Chance } from 'chance';
 
 import { CreatingSessionModalComponent } from './creating-session-modal.component';
+import { By } from '@angular/platform-browser';
 
 const chance = new Chance();
 
@@ -61,6 +62,22 @@ describe('CreatingSessionModalComponent', () => {
     component.sessionReady.subscribe((s) => expect(s).toBe(session));
 
     component.sessionReady.emit(session);
+  });
+
+  test('onSessionPending should call getSessionStatus after SESSION_STATUS_WAIT_TIME ms and repeat', () => {
+    jest.useFakeTimers();
+    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    sessionService.getSessionStatus.mockReturnValue(throwError(''));
+    const spy = jest.spyOn(component, 'getSessionStatus');
+
+    component.onSessionPending();
+    jest.advanceTimersToNextTimer();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    jest.advanceTimersToNextTimer();
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    jest.useRealTimers();
   });
 
   test('onError should set waitingForSession to false', () => {
@@ -184,4 +201,47 @@ describe('CreatingSessionModalComponent', () => {
       sessionService.getSessionStatus.mockReturnValueOnce(of(session) as any);
     }
   }
+
+  test('should call close when clicking on "x"', () => {
+    const spy = jest.spyOn(component, 'close');
+
+    debugElement.query(By.css('.close')).nativeElement.click();
+
+    expect(spy).toHaveBeenCalledWith('Cross click');
+  });
+
+  test('should show spinner if waitingForSession is true', () => {
+    component.waitingForSession = true;
+
+    fixture.detectChanges();
+
+    const spinner = debugElement.query(By.css('.spinner'));
+    const error = debugElement.query(By.css('.error'));
+    expect(spinner).toBeTruthy();
+    expect(error).toBeFalsy();
+  });
+
+  test('should show error if waitingForSession is false', () => {
+    fixture.detectChanges();
+    component.waitingForSession = false;
+
+    fixture.detectChanges();
+
+    const spinner = debugElement.query(By.css('.spinner'));
+    const error = debugElement.query(By.css('.error'));
+    expect(error).toBeTruthy();
+    expect(spinner).toBeFalsy();
+  });
+
+  test('should call cancelSession when clicking cancel button', () => {
+    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    const button = debugElement.query(
+      By.css('.modal-footer > .btn')
+    ).nativeElement;
+    const spy = jest.spyOn(component, 'cancelSession');
+
+    button.click();
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

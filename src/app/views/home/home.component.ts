@@ -4,8 +4,8 @@ import { MachinesService } from '@api-module/api/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { setTimeout } from 'timers';
 import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
-
-const REFRESH_COUNTDOWN = 1000;
+import { TimeConstants } from '@constants/time-constants';
+import { timer } from 'rxjs';
 
 @Component({
   templateUrl: './home.component.html',
@@ -43,7 +43,9 @@ export class HomeComponent implements OnInit {
       .add(() => {
         this.canConnect =
           this.machines?.some((machine) => machine.amount) ?? false;
-        setTimeout(() => (this.canRefresh = true), REFRESH_COUNTDOWN);
+        timer(TimeConstants.REFRESH_WAIT_TIME).subscribe(
+          () => (this.canRefresh = true)
+        );
         this.loaded = true;
       });
   }
