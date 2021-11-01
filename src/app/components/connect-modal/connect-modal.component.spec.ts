@@ -1,13 +1,16 @@
-import { DebugElement } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { MachineType } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+import { Chance } from 'chance';
+
 import { ConnectModalComponent } from './connect-modal.component';
+import { MachineType } from '@api-module/model/models';
+import { By } from '@angular/platform-browser';
 
 jest.mock('@ng-bootstrap/ng-bootstrap');
+
+const chance = new Chance();
 
 describe('ConnectModalComponent', () => {
   let component: ConnectModalComponent;
@@ -17,9 +20,9 @@ describe('ConnectModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule],
       declarations: [ConnectModalComponent],
       providers: [NgbActiveModal],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
@@ -32,65 +35,126 @@ describe('ConnectModalComponent', () => {
   });
 
   test('should create', () => {
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
-  test('close should call activeModal close', () => {
-    component.close();
+  test('close should call activeModal close with message', () => {
+    const message = chance.string();
 
-    expect(activeModal.close).toHaveBeenCalled();
+    component.close(message);
+
+    expect(activeModal.close).toHaveBeenCalledWith(message);
   });
 
-  test('isDisabled should return true if type is not in availableTypes list', () => {
-    component.availableTypes = ['cpu'];
+  describe('Select machine type step', () => {
+    test('typeSelected should set selectedType and set step to one', () => {
+      const type = MachineType.Cpu;
+      component.selectedType = null;
+      component.step = null;
 
-    const disabled = component.isDisabled('gpu');
+      component.typeSelected(type);
 
-    expect(disabled).toBeTruthy();
+      expect(component.selectedType).toBe(type);
+      expect(component.step).toBe(1);
+    });
+
+    test('should show selectMachineTypeModal when step is zero', () => {
+      component.step = 0;
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-select-machine-type-modal'));
+      expect(elem).toBeTruthy();
+    });
+
+    test('should not show selectMachineTypeModal when step is not zero', () => {
+      component.step = chance.natural({ exclude: [0] });
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-select-machine-type-modal'));
+      expect(elem).toBeFalsy();
+    });
+
+    test('should call close with message when closeModal event raised', () => {
+      const message = chance.string();
+      const spy = jest.spyOn(component, 'close');
+      component.step = 0;
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-select-machine-type-modal'));
+      elem.triggerEventHandler('closeModal', message);
+
+      expect(spy).toHaveBeenCalledWith(message);
+    });
+
+    test('should call typeSelected with type when typeSelected event raised', () => {
+      const type = MachineType.Cpu;
+      const spy = jest.spyOn(component, 'typeSelected');
+      component.step = 0;
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-select-machine-type-modal'));
+      elem.triggerEventHandler('typeSelected', type);
+
+      expect(spy).toHaveBeenCalledWith(type);
+    });
   });
 
-  test('isDisabled should return false if type is in availableTypes list', () => {
-    component.availableTypes = ['gpu'];
+  describe('Creating session step', () => {
+    test('sessionCreated should set session and set step to two', () => {
+      const session = { id: chance.guid(), type: MachineType.Cpu };
+      component.session = null;
+      component.step = null;
 
-    const disabled = component.isDisabled('gpu');
+      component.sessionCreated(session);
 
-    expect(disabled).toBeFalsy();
-  });
+      expect(component.session).toBe(session);
+      expect(component.step).toBe(2);
+    });
 
-  test('isDisabled should return true if availableTypes is null', () => {
-    component.availableTypes = null;
+    test('should show creatingSessionModal when step is one', () => {
+      component.step = 1;
 
-    const disabled = component.isDisabled('gpu');
+      fixture.detectChanges();
 
-    expect(disabled).toBeTruthy();
-  });
+      const elem = debugElement.query(By.css('app-creating-session-modal'));
+      expect(elem).toBeTruthy();
+    });
 
-  test('should set machineTypes to key value list from MachineType', () => {
-    const keys = component.machineTypes.map((type) => type.key);
-    const values = component.machineTypes.map((type) => type.value);
+    test('should not show creatingSessionModal when step is not one', () => {
+      component.step = chance.natural({ exclude: [1] });
 
-    expect(keys).toEqual(Object.keys(MachineType));
-    expect(values).toEqual(Object.values(MachineType));
-  });
+      fixture.detectChanges();
 
-  test('should call close when clicking on "x"', () => {
-    const spy = jest.spyOn(component, 'close');
+      const elem = debugElement.query(By.css('app-creating-session-modal'));
+      expect(elem).toBeFalsy();
+    });
 
-    debugElement.query(By.css('.close')).nativeElement.click();
+    test('should call close with message when closeModal event raised', () => {
+      const message = chance.string();
+      const spy = jest.spyOn(component, 'close');
+      component.step = 1;
+      fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalledWith('Cross click');
-  });
+      const elem = debugElement.query(By.css('app-creating-session-modal'));
+      elem.triggerEventHandler('closeModal', message);
 
-  test('should show all machineTypes as radio buttons', () => {
-    component.machineTypes = [
-      { key: '', value: 'cpu' },
-      { key: '', value: 'gpu' },
-    ];
+      expect(spy).toHaveBeenCalledWith(message);
+    });
 
-    fixture.detectChanges();
+    test('should call typeSelected with type when typeSelected event raised', () => {
+      const session = { id: chance.guid(), type: MachineType.Cpu };
+      const spy = jest.spyOn(component, 'sessionCreated');
+      component.step = 1;
+      fixture.detectChanges();
 
-    const radios = debugElement.queryAll(By.css('input[type=radio]'));
+      const elem = debugElement.query(By.css('app-creating-session-modal'));
+      elem.triggerEventHandler('sessionReady', session);
 
-    expect(radios.length).toBe(component.machineTypes.length);
+      expect(spy).toHaveBeenCalledWith(session);
+    });
   });
 });

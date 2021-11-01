@@ -1,35 +1,19 @@
-<div class="modal-header">
-  <h4 class="modal-title">Select machine type:</h4>
-  <button
-    type="button"
-    class="close"
-    aria-label="Close"
-    (click)="close('Cross click')"
+<ng-container *ngIf="step === 0">
+  <app-select-machine-type-modal
+    [availableTypes]="availableTypes"
+    (closeModal)="close($event)"
+    (typeSelected)="typeSelected($event)"
   >
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<form #form="ngForm" (ngSubmit)="onSubmit()">
-  <div class="modal-body">
-    <div class="form-check" *ngFor="let machineType of machineTypes">
-      <label class="form-check-label">
-        <input
-          type="radio"
-          class="form-check-input"
-          name="type"
-          [id]="machineType.value"
-          [value]="machineType.value"
-          [attr.disabled]="isDisabled(machineType.value) || null"
-          [(ngModel)]="type"
-          required
-        />
-        {{ machineType.key }}
-      </label>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" [disabled]="!form.form.valid" class="btn btn-primary">
-      Connect
-    </button>
-  </div>
-</form>
+  </app-select-machine-type-modal>
+</ng-container>
+
+<ng-container *ngIf="step === 1">
+  <app-creating-session-modal
+    [machineType]="selectedType"
+    (closeModal)="close($event)"
+    (sessionReady)="sessionCreated($event)"
+  >
+  </app-creating-session-modal>
+</ng-container>
+
+<button (click)="progress()"></button>

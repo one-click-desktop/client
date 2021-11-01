@@ -9,7 +9,7 @@
     "ng:e2e": "ng e2e",
     "cy:open": "cypress open",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --detectOpenHandles",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "build": "npm run electron:serve-tsc && ng build --base-ref ./",
     "build:dev": "npm run build -- -c dev",

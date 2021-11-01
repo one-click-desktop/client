@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Machines } from '@api-module/model/models';
 import { MachinesService } from '@api-module/api/api';
-import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { setTimeout } from 'timers';
+import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
+
+const REFRESH_COUNTDOWN = 1000;
 
 @Component({
   templateUrl: './home.component.html',
@@ -41,7 +43,7 @@ export class HomeComponent implements OnInit {
       .add(() => {
         this.canConnect =
           this.machines?.some((machine) => machine.amount) ?? false;
-        setTimeout(() => (this.canRefresh = true), 1000);
+        setTimeout(() => (this.canRefresh = true), REFRESH_COUNTDOWN);
         this.loaded = true;
       });
   }
@@ -52,9 +54,14 @@ export class HomeComponent implements OnInit {
   }
 
   connect(): void {
-    const modalRef = this.modalService.open(ConnectModalComponent);
-    modalRef.componentInstance.availableTypes = this.machines?.map(
-      (machine) => machine.type
-    );
+    const modalRef = this.modalService.open(ConnectModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+    });
+    if (modalRef) {
+      modalRef.componentInstance.availableTypes = this.machines?.map(
+        (machine) => machine.type
+      );
+    }
   }
 }
