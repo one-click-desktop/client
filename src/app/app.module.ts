@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgxElectronModule } from 'ngx-electron';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,7 +31,6 @@ import { RdpConnectionModalComponent } from './components/rdp-connection-modal/r
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxElectronModule,
     NgbModule,
     ApiModule,
     HttpClientModule,

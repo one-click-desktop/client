@@ -112,7 +112,7 @@ describe('HomeComponent', () => {
     });
 
     test('should show noMachines when no machines returned', () => {
-      machinesService.getMachines.mockImplementationOnce(() => of(null));
+      machinesService.getMachines.mockReturnValueOnce(of(null));
 
       fixture.detectChanges();
 
@@ -122,7 +122,7 @@ describe('HomeComponent', () => {
 
     test('should not show noMachines when machines returned', () => {
       const ret = [{ type: 'cpu', amount: 0 }];
-      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      machinesService.getMachines.mockReturnValueOnce(of(ret as any));
 
       fixture.detectChanges();
 
@@ -146,7 +146,7 @@ describe('HomeComponent', () => {
       const value = chance.natural({ min: 1 });
       const ret = [{ type: 'cpu', amount: value }];
 
-      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      machinesService.getMachines.mockReturnValueOnce(of(ret as any));
       component.getAvailableMachines();
 
       fixture.detectChanges();
@@ -164,7 +164,7 @@ describe('HomeComponent', () => {
     });
 
     test('connect should call ngbModal open', () => {
-      modalService.open.mockReturnValue({
+      modalService.open.mockReturnValueOnce({
         componentInstance: { availableTypes: null },
       } as any);
 
@@ -184,7 +184,7 @@ describe('HomeComponent', () => {
     test('should set canConnect to true if any machine available', () => {
       const value = chance.natural({ min: 1 });
       const ret = [{ type: 'cpu', amount: value }];
-      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      machinesService.getMachines.mockReturnValueOnce(of(ret as any));
       component.canConnect = false;
 
       component.getAvailableMachines();
@@ -194,7 +194,7 @@ describe('HomeComponent', () => {
 
     test('should set canConnect to false if no machine available', () => {
       const ret = [{ type: 'cpu', amount: 0 }];
-      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      machinesService.getMachines.mockReturnValueOnce(of(ret as any));
       component.canConnect = true;
 
       component.getAvailableMachines();
@@ -204,7 +204,7 @@ describe('HomeComponent', () => {
 
     test('should set canConnect to false if array empty', () => {
       const ret = [];
-      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      machinesService.getMachines.mockReturnValueOnce(of(ret as any));
       component.canConnect = true;
 
       component.getAvailableMachines();

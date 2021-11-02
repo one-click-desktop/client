@@ -22,7 +22,7 @@ export class CreatingSessionModalComponent
 
   session: Session;
   waitingForSession: boolean;
-  sessionStatus$: Subscription;
+  sessionStatusSub: Subscription;
 
   constructor(private sessionService: SessionService) {
     super();
@@ -77,12 +77,12 @@ export class CreatingSessionModalComponent
   }
 
   onSessionReady(): void {
-    this.sessionStatus$?.unsubscribe();
+    this.sessionStatusSub?.unsubscribe();
     this.sessionReady.emit(this.session);
   }
 
   onSessionPending(): void {
-    this.sessionStatus$ = timer(
+    this.sessionStatusSub = timer(
       TimeConstants.SESSION_STATUS_WAIT_TIME,
       TimeConstants.SESSION_STATUS_WAIT_TIME
     ).subscribe(() => this.getSessionStatus());
@@ -94,6 +94,7 @@ export class CreatingSessionModalComponent
 
   cancelSession(): void {
     this.sessionService.deleteSession(this.session.id).subscribe();
+    this.sessionStatusSub?.unsubscribe();
     this.close('Cancel');
   }
 }

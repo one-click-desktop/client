@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Machines } from '@api-module/model/models';
 import { MachinesService } from '@api-module/api/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { setTimeout } from 'timers';
 import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
 import { TimeConstants } from '@constants/time-constants';
 import { timer } from 'rxjs';

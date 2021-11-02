@@ -32,9 +32,9 @@ describe('CreatingSessionModalComponent', () => {
     debugElement = fixture.debugElement;
 
     sessionService = mocked(TestBed.inject(SessionService), false);
-    sessionService.getSession.mockReturnValue(of(null));
-    sessionService.getSessionStatus.mockReturnValue(of(null));
-    sessionService.deleteSession.mockReturnValue(of(null));
+    sessionService.getSession.mockImplementation(() => of(null));
+    sessionService.getSessionStatus.mockImplementation(() => of(null));
+    sessionService.deleteSession.mockImplementation(() => of(null));
   });
 
   test('should create', () => {
@@ -43,12 +43,12 @@ describe('CreatingSessionModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  test('onSessionReady should call sessionReady emit with session and unsubscribe sessionStatus$', () => {
+  test('onSessionReady should call sessionReady emit with session and unsubscribe sessionStatusSub', () => {
     const spy = jest.spyOn(component.sessionReady, 'emit');
     const session = { id: chance.guid(), type: MachineType.Cpu };
     component.session = session;
-    component.sessionStatus$ = new Subscription();
-    const spySub = jest.spyOn(component.sessionStatus$, 'unsubscribe');
+    component.sessionStatusSub = new Subscription();
+    const spySub = jest.spyOn(component.sessionStatusSub, 'unsubscribe');
 
     component.onSessionReady();
 
@@ -67,7 +67,7 @@ describe('CreatingSessionModalComponent', () => {
   test('onSessionPending should call getSessionStatus after SESSION_STATUS_WAIT_TIME ms and repeat', () => {
     jest.useFakeTimers();
     component.session = { id: chance.guid(), type: MachineType.Cpu };
-    sessionService.getSessionStatus.mockReturnValue(throwError(''));
+    sessionService.getSessionStatus.mockReturnValueOnce(throwError(''));
     const spy = jest.spyOn(component, 'getSessionStatus');
 
     component.onSessionPending();
@@ -88,15 +88,18 @@ describe('CreatingSessionModalComponent', () => {
     expect(component.waitingForSession).toBeFalsy();
   });
 
-  test('cancelSessionShould call deleteSession and close', () => {
+  test('cancelSessionShould call deleteSession, unsubscribe sessionStatusSub and close', () => {
     const spy = jest.spyOn(component, 'close');
     const session = { id: chance.guid(), type: MachineType.Cpu };
     component.session = session;
+    component.sessionStatusSub = new Subscription();
+    const spySub = jest.spyOn(component.sessionStatusSub, 'unsubscribe');
 
     component.cancelSession();
 
     expect(sessionService.deleteSession).toHaveBeenCalledWith(session.id);
     expect(spy).toHaveBeenCalled();
+    expect(spySub).toHaveBeenCalled();
   });
 
   test('createSession should set waitingForSession to true and call getSession', () => {
