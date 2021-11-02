@@ -1,11 +1,20 @@
-@use "src/app/styles/colors";
-
-$spinner-size: 4rem;
+$spinner-size: 3rem;
 
 .spinner {
-  text-align: center;
   font-size: $spinner-size;
-  line-height: 0;
+}
+
+.modal-body {
+  text-align: center;
+
+  &-header {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  &-content {
+    font-size: 0.9rem;
+  }
 }
 
 .rotate {
@@ -22,9 +31,4 @@ $spinner-size: 4rem;
   to {
     transform: rotate(360deg);
   }
-}
-
-.error {
-  text-align: center;
-  color: colors.$value-zero-color;
 }

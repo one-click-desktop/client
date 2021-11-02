@@ -30,6 +30,10 @@ export class ConnectModalComponent {
     this.step = 2;
   }
 
+  sessionEnded(): void {
+    this.close('Session ended');
+  }
+
   // Development helper function
   progress(): void {
     this.step++;

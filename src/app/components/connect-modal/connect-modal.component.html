@@ -16,4 +16,13 @@
   </app-creating-session-modal>
 </ng-container>
 
+<ng-container *ngIf="step === 2">
+  <app-rdp-connection-modal
+    [session]="session"
+    (closeModal)="close($event)"
+    (sessionEnded)="sessionEnded()"
+  >
+  </app-rdp-connection-modal>
+</ng-container>
+
 <button (click)="progress()"></button>

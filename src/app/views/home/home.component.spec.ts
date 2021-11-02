@@ -46,178 +46,186 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  test('should show amount of available machines', () => {
-    fixture.detectChanges();
+  describe('DOM tests', () => {
+    test('should show amount of available machines', () => {
+      fixture.detectChanges();
 
-    const value = chance.natural({ min: 1 });
-    component.machines = [{ type: 'cpu', amount: value }];
+      const value = chance.natural({ min: 1 });
+      component.machines = [{ type: 'cpu', amount: value }];
 
-    fixture.detectChanges();
+      fixture.detectChanges();
 
-    const displayedValue = getValueNativeElement().textContent;
-    expect(+displayedValue).toBe(value);
+      const displayedValue = getValueNativeElement().textContent;
+      expect(+displayedValue).toBe(value);
+    });
+
+    test('should give entry-value class zero if value is falsy', () => {
+      fixture.detectChanges();
+
+      component.machines = [{ type: 'cpu', amount: 0 }];
+
+      fixture.detectChanges();
+
+      expect(getValueNativeElement().classList).toContain(
+        'machines-entry-value-zero'
+      );
+    });
+
+    function getValueNativeElement(): any {
+      return debugElement.query(
+        By.css('.machines-entry > .machines-entry-value')
+      ).nativeElement;
+    }
+
+    test('should call refresh when clicking refresh button', () => {
+      const spy = jest.spyOn(component, 'refresh');
+
+      debugElement.query(By.css('.home-refresh')).nativeElement.click();
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    test('should call connect when clicking connect button', () => {
+      const spy = jest.spyOn(component, 'connect');
+
+      debugElement.query(By.css('.home-connect')).nativeElement.click();
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    test('refresh should be disabled if canRefresh is false', () => {
+      component.canRefresh = false;
+
+      fixture.detectChanges();
+      const button = debugElement.query(By.css('.home-refresh')).nativeElement;
+
+      expect(button.disabled).toBeTruthy();
+    });
+
+    test('connect should be disabled if canConnect is false', () => {
+      component.canConnect = false;
+
+      fixture.detectChanges();
+      const button = debugElement.query(By.css('.home-connect')).nativeElement;
+
+      expect(button.disabled).toBeTruthy();
+    });
+
+    test('should show noMachines when no machines returned', () => {
+      machinesService.getMachines.mockImplementationOnce(() => of(null));
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('.no-machines'));
+      expect(elem).toBeTruthy();
+    });
+
+    test('should not show noMachines when machines returned', () => {
+      const ret = [{ type: 'cpu', amount: 0 }];
+      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('.no-machines'));
+      expect(elem).toBeFalsy();
+    });
   });
 
-  test('should give entry-value class zero if value is falsy', () => {
-    fixture.detectChanges();
+  describe('Code tests', () => {
+    test('should call getAvailableMachines on init', () => {
+      const spy = jest.spyOn(component, 'getAvailableMachines');
 
-    component.machines = [{ type: 'cpu', amount: 0 }];
+      fixture.detectChanges();
 
-    fixture.detectChanges();
+      expect(spy).toHaveBeenCalled();
+    });
 
-    expect(getValueNativeElement().classList).toContain(
-      'machines-entry-value-zero'
-    );
-  });
+    test('getAvailableMachines should call machines service and save response', () => {
+      fixture.detectChanges();
 
-  function getValueNativeElement(): any {
-    return debugElement.query(By.css('.machines-entry > .machines-entry-value'))
-      .nativeElement;
-  }
+      const value = chance.natural({ min: 1 });
+      const ret = [{ type: 'cpu', amount: value }];
 
-  test('should call getAvailableMachines on init', () => {
-    const spy = jest.spyOn(component, 'getAvailableMachines');
+      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      component.getAvailableMachines();
 
-    fixture.detectChanges();
+      fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalled();
-  });
+      expect(machinesService.getMachines).toHaveBeenCalled();
+      expect(component.machines).toBe(ret);
+    });
 
-  test('getAvailableMachines should call machines service and save response', () => {
-    fixture.detectChanges();
+    test('refresh should set canRefresh to false', () => {
+      component.canRefresh = true;
 
-    const value = chance.natural({ min: 1 });
-    const ret = [{ type: 'cpu', amount: value }];
+      component.refresh();
 
-    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
-    component.getAvailableMachines();
+      expect(component.canRefresh).toBeFalsy();
+    });
 
-    fixture.detectChanges();
+    test('connect should call ngbModal open', () => {
+      modalService.open.mockReturnValue({
+        componentInstance: { availableTypes: null },
+      } as any);
 
-    expect(machinesService.getMachines).toHaveBeenCalled();
-    expect(component.machines).toBe(ret);
-  });
+      component.connect();
 
-  test('should call refresh when clicking refresh button', () => {
-    const spy = jest.spyOn(component, 'refresh');
+      expect(modalService.open).toHaveBeenCalled();
+    });
 
-    debugElement.query(By.css('.home-refresh')).nativeElement.click();
+    test('should set machines to empty array if subscribe error', () => {
+      machinesService.getMachines.mockReturnValueOnce(throwError(''));
 
-    expect(spy).toHaveBeenCalled();
-  });
+      component.getAvailableMachines();
 
-  test('should call connect when clicking connect button', () => {
-    const spy = jest.spyOn(component, 'connect');
+      expect(component.machines.length).toBe(0);
+    });
 
-    debugElement.query(By.css('.home-connect')).nativeElement.click();
+    test('should set canConnect to true if any machine available', () => {
+      const value = chance.natural({ min: 1 });
+      const ret = [{ type: 'cpu', amount: value }];
+      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      component.canConnect = false;
 
-    expect(spy).toHaveBeenCalled();
-  });
+      component.getAvailableMachines();
 
-  test('refresh should be disabled if canRefresh is false', () => {
-    component.canRefresh = false;
+      expect(component.canConnect).toBeTruthy();
+    });
 
-    fixture.detectChanges();
-    const button = debugElement.query(By.css('.home-refresh')).nativeElement;
+    test('should set canConnect to false if no machine available', () => {
+      const ret = [{ type: 'cpu', amount: 0 }];
+      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      component.canConnect = true;
 
-    expect(button.disabled).toBeTruthy();
-  });
+      component.getAvailableMachines();
 
-  test('connect should be disabled if canConnect is false', () => {
-    component.canConnect = false;
+      expect(component.canConnect).toBeFalsy();
+    });
 
-    fixture.detectChanges();
-    const button = debugElement.query(By.css('.home-connect')).nativeElement;
+    test('should set canConnect to false if array empty', () => {
+      const ret = [];
+      machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
+      component.canConnect = true;
 
-    expect(button.disabled).toBeTruthy();
-  });
+      component.getAvailableMachines();
 
-  test('refresh should set canRefresh to false', () => {
-    component.canRefresh = true;
+      expect(component.canConnect).toBeFalsy();
+    });
 
-    expect(component.canRefresh).toBeTruthy();
-    debugElement.query(By.css('.home-refresh')).nativeElement.click();
+    test('should set canRefresh to true after REFRESH_COUNTDOWN and not after another', () => {
+      jest.useFakeTimers();
+      component.canRefresh = false;
 
-    expect(component.canRefresh).toBeFalsy();
-  });
+      component.getAvailableMachines();
+      jest.advanceTimersToNextTimer();
 
-  test('connect should call ngbModal open', () => {
-    modalService.open.mockReturnValue({
-      componentInstance: { availableTypes: null },
-    } as any);
+      expect(component.canRefresh).toBeTruthy();
 
-    component.connect();
-    expect(modalService.open).toHaveBeenCalled();
-  });
+      component.canRefresh = false;
+      jest.advanceTimersToNextTimer();
 
-  test('should set machines to empty array if subscribe error', () => {
-    machinesService.getMachines.mockReturnValueOnce(throwError(''));
-
-    component.getAvailableMachines();
-
-    expect(component.machines.length).toBe(0);
-  });
-
-  test('should set canConnect to true if any machine available', () => {
-    const value = chance.natural({ min: 1 });
-    const ret = [{ type: 'cpu', amount: value }];
-    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
-    component.canConnect = false;
-    component.getAvailableMachines();
-
-    expect(component.canConnect).toBeTruthy();
-  });
-
-  test('should set canConnect to false if no machine available', () => {
-    const ret = [{ type: 'cpu', amount: 0 }];
-    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
-    component.canConnect = true;
-    component.getAvailableMachines();
-
-    expect(component.canConnect).toBeFalsy();
-  });
-
-  test('should set canConnect to false if array empty', () => {
-    const ret = [];
-    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
-    component.canConnect = true;
-    component.getAvailableMachines();
-
-    expect(component.canConnect).toBeFalsy();
-  });
-
-  test('should show noMachines when no machines returned', () => {
-    machinesService.getMachines.mockImplementationOnce(() => of(null));
-
-    fixture.detectChanges();
-
-    const elem = debugElement.query(By.css('.no-machines'));
-    expect(elem).toBeTruthy();
-  });
-
-  test('should not show noMachines when machines returned', () => {
-    const ret = [{ type: 'cpu', amount: 0 }];
-    machinesService.getMachines.mockImplementationOnce(() => of(ret as any));
-
-    fixture.detectChanges();
-
-    const elem = debugElement.query(By.css('.no-machines'));
-    expect(elem).toBeFalsy();
-  });
-
-  test('should set canRefresh to true after REFRESH_COUNTDOWN and not after another', () => {
-    jest.useFakeTimers();
-    component.canRefresh = false;
-
-    component.getAvailableMachines();
-    jest.advanceTimersToNextTimer();
-
-    expect(component.canRefresh).toBeTruthy();
-
-    component.canRefresh = false;
-    jest.advanceTimersToNextTimer();
-
-    expect(component.canRefresh).toBeFalsy();
-    jest.useRealTimers();
+      expect(component.canRefresh).toBeFalsy();
+      jest.useRealTimers();
+    });
   });
 });

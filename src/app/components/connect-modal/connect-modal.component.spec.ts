@@ -157,4 +157,54 @@ describe('ConnectModalComponent', () => {
       expect(spy).toHaveBeenCalledWith(session);
     });
   });
+
+  describe('RDP connection step', () => {
+    test('sessionEnded should call close', () => {
+      const spy = jest.spyOn(component, 'close');
+      component.sessionEnded();
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    test('should show rdpConnectionModal when step is two', () => {
+      component.step = 2;
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-rdp-connection-modal'));
+      expect(elem).toBeTruthy();
+    });
+
+    test('should not show rdpConnectionModal when step is not one', () => {
+      component.step = chance.natural({ exclude: [2] });
+
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-rdp-connection-modal'));
+      expect(elem).toBeFalsy();
+    });
+
+    test('should call close with message when closeModal event raised', () => {
+      const message = chance.string();
+      const spy = jest.spyOn(component, 'close');
+      component.step = 2;
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-rdp-connection-modal'));
+      elem.triggerEventHandler('closeModal', message);
+
+      expect(spy).toHaveBeenCalledWith(message);
+    });
+
+    test('should call sessionEnded when sessionEnded event raised', () => {
+      const spy = jest.spyOn(component, 'sessionEnded');
+      component.step = 2;
+      fixture.detectChanges();
+
+      const elem = debugElement.query(By.css('app-rdp-connection-modal'));
+      elem.triggerEventHandler('sessionEnded', {});
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });

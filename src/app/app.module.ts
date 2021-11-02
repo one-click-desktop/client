@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { ConnectModalComponent } from './components/connect-modal/connect-modal.component';
 import { ModalBaseComponent } from './components/modal-base/modal-base.component';
 import { CreatingSessionModalComponent } from './components/creating-session-modal/creating-session-modal.component';
+import { RdpConnectionModalComponent } from './components/rdp-connection-modal/rdp-connection-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CreatingSessionModalComponent } from './components/creating-session-mod
     ConnectModalComponent,
     ModalBaseComponent,
     CreatingSessionModalComponent,
+    RdpConnectionModalComponent,
   ],
   imports: [
     BrowserModule,
