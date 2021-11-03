@@ -56,10 +56,13 @@ describe('CreatingSessionModalComponent', () => {
     expect(spySub).toHaveBeenCalled();
   });
 
-  test('sessionReady should emit session', () => {
+  test('sessionReady should emit session', (done) => {
     const session = { id: chance.guid(), type: MachineType.Cpu };
 
-    component.sessionReady.subscribe((s) => expect(s).toBe(session));
+    component.sessionReady.subscribe((s) => {
+      expect(s).toBe(session);
+      done();
+    });
 
     component.sessionReady.emit(session);
   });

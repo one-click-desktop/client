@@ -33,10 +33,13 @@ describe('ModalBaseComponent', () => {
     expect(spy).toHaveBeenCalledWith(message);
   });
 
-  test('closeModal should emit message', () => {
+  test('closeModal should emit message', (done) => {
     const message = chance.string();
 
-    component.closeModal.subscribe((str) => expect(str).toBe(message));
+    component.closeModal.subscribe((str) => {
+      expect(str).toBe(message);
+      done();
+    });
 
     component.closeModal.emit(message);
   });

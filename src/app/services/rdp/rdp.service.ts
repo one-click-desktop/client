@@ -25,6 +25,13 @@ export class RdpService {
         ? this.spawnWindowsRdpProcess(session)
         : this.spawnLinuxRdpProcess(session);
 
+      if (this.process) {
+        subscriber.next();
+      } else {
+        subscriber.error('Failed to create process');
+        return;
+      }
+
       this.process.on('error', (err) => subscriber.error(err));
       this.process.on('close', () => {
         subscriber.complete();
@@ -39,6 +46,7 @@ export class RdpService {
 
   private spawnLinuxRdpProcess(session: Session): any {
     //TODO
+    return this.electronService.childProcess.spawn('mstsc.exe');
   }
 
   endRdpConnection(): void {

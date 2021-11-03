@@ -40,7 +40,6 @@ export class RdpConnectionModalComponent
           this.isConnected = true;
         },
         (error) => {
-          console.log(error);
           this.isError = true;
         },
         () => {

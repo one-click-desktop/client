@@ -95,10 +95,13 @@ describe('ConnectModalComponent', () => {
     expect(spy).toHaveBeenCalledWith(type);
   });
 
-  test('typeSelected should emit type', () => {
+  test('typeSelected should emit type', (done) => {
     const type = MachineType.Cpu;
 
-    component.typeSelected.subscribe((t) => expect(t).toBe(type));
+    component.typeSelected.subscribe((t) => {
+      expect(t).toBe(type);
+      done();
+    });
 
     component.typeSelected.emit(type);
   });
