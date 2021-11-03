@@ -15,6 +15,7 @@ import { ConnectModalComponent } from './components/connect-modal/connect-modal.
 import { ModalBaseComponent } from './components/modal-base/modal-base.component';
 import { CreatingSessionModalComponent } from './components/creating-session-modal/creating-session-modal.component';
 import { RdpConnectionModalComponent } from './components/rdp-connection-modal/rdp-connection-modal.component';
+import { LoginComponent } from './views/login/login.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { RdpConnectionModalComponent } from './components/rdp-connection-modal/r
     ModalBaseComponent,
     CreatingSessionModalComponent,
     RdpConnectionModalComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
