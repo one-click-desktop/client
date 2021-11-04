@@ -1,11 +1,13 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MachineType } from '@api-module/model/models';
-import { RdpService } from '@services/rdp/rdp.service';
+
 import { Chance } from 'chance';
 import { Observable, of, Subscription } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+
+import { MachineType } from '@api-module/model/models';
+import { RdpService } from '@services/rdp/rdp.service';
 
 import { RdpConnectionModalComponent } from './rdp-connection-modal.component';
 

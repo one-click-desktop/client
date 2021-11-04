@@ -1,3 +1,5 @@
+import { Location } from '@angular/common';
+import { DebugElement } from '@angular/core';
 import {
   ComponentFixture,
   fakeAsync,
@@ -5,12 +7,12 @@ import {
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { Location } from '@angular/common';
+import { Router, RouterLinkWithHref } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { PathConstants } from '@constants/path-constants';
 
 import { TopbarComponent } from './topbar.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router, RouterLinkWithHref } from '@angular/router';
 
 describe('TopbarComponent', () => {
   let component: TopbarComponent;
@@ -24,11 +26,11 @@ describe('TopbarComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           {
-            path: 'home',
+            path: PathConstants.HOME,
             component: TopbarComponent,
           },
           {
-            path: 'settings',
+            path: PathConstants.SETTINGS,
             component: TopbarComponent,
           },
         ]),
@@ -75,11 +77,11 @@ describe('TopbarComponent', () => {
   }
 
   test('home should lead to home page', fakeAsync(() => {
-    routerLinkTest('Settings', '/settings');
+    routerLinkTest('Settings', PathConstants.SETTINGS);
   }));
 
   test('settings should lead to settings page', fakeAsync(() => {
-    routerLinkTest('Home', '/home');
+    routerLinkTest('Home', PathConstants.HOME);
   }));
 
   function routerLinkTest(name: string, path: string) {
@@ -87,13 +89,13 @@ describe('TopbarComponent', () => {
       .queryAll(By.css('.nav-link'))
       .filter((nav) => nav.nativeElement.textContent === name)[0];
     const routerLink = routerLinkDebug.injector.get(RouterLinkWithHref);
-    expect(routerLink['href']).toBe(path);
+    expect(routerLink['href']).toBe(`/${path}`);
 
     routerLinkDebug.nativeElement.click();
 
     tick();
 
-    expect(location.path()).toBe(path);
+    expect(location.path()).toBe(`/${path}`);
     expect(routerLinkDebug.nativeElement.classList).toContain('disabled');
   }
 

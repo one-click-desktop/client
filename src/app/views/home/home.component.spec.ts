@@ -1,12 +1,14 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MachinesService } from '@api-module/api/api';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Chance } from 'chance';
 import { of, throwError } from 'rxjs';
 import { MockedObject } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
+
+import { MachinesService } from '@api-module/api/api';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { HomeComponent } from './home.component';
 

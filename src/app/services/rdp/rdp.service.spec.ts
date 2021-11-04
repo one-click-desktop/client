@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { MachineType, Session } from '@api-module/model/models';
-import { ElectronService } from '@services/electron/electron.service';
+
 import { Chance } from 'chance';
 import { mocked, MockedObjectDeep } from 'ts-jest/dist/utils/testing';
+
+import { MachineType, Session } from '@api-module/model/models';
+import { ElectronService } from '@services/electron/electron.service';
 
 import { RdpService } from './rdp.service';
 

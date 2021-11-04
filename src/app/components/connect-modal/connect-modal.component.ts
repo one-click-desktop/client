@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { MachineType, Session } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -34,7 +35,7 @@ export class ConnectModalComponent {
     this.close('Session ended');
   }
 
-  // Development helper function
+  // !REMOVE
   progress(): void {
     this.step++;
   }

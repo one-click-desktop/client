@@ -1,0 +1,14 @@
+@use "src/app/styles/colors";
+
+.card {
+  border-radius: 1rem;
+  box-shadow: inset;
+}
+
+.background {
+  background-color: colors.$login-background-color;
+}
+
+.error {
+  color: colors.$error;
+}
