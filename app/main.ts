@@ -1,14 +1,17 @@
-import { app, BrowserWindow, screen } from 'electron';
-import * as url from 'url';
-import * as path from 'path';
+import { app, BrowserWindow } from 'electron';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as url from 'url';
+
+import * as remote from '@electron/remote/main';
 
 // Initialize remote module
-require('@electron/remote/main').initialize();
+remote.initialize();
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
-  serve = args.some((val) => val === '--serve');
+  serve = args.some((val) => val === '--serve'),
+  dev = args.some((val) => val === '--dev');
 
 function createWindow(): BrowserWindow {
   const size = { x: 800, y: 600 };
@@ -16,16 +19,17 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     width: size.x,
     height: size.y,
+    resizable: serve || dev,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: serve ? true : false,
       contextIsolation: false,
-      enableRemoteModule: true,
     },
   });
 
+  remote.enable(win.webContents);
+
   if (serve) {
-    win.webContents.openDevTools();
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '../node_modules/electron')),
     });
@@ -45,9 +49,13 @@ function createWindow(): BrowserWindow {
         slashes: true,
       })
     );
+
+    win.setMenuBarVisibility(false);
   }
 
-  win.setMenuBarVisibility(false);
+  if (dev || serve) {
+    win.setMenuBarVisibility(true);
+  }
 
   win.on('closed', function () {
     win = null;

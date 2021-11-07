@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { PathConstants } from '@constants/path-constants';
 
 @Component({
   selector: 'app-topbar',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent {
+  paths = PathConstants;
+
   constructor() {}
 
   logOut(): void {

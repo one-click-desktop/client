@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { PathConstants } from '@constants/path-constants';
 import { HomeComponent } from '@views/home/home.component';
+import { LoginComponent } from '@views/login/login.component';
 import { MainComponent } from '@views/main/main.component';
 
 const routes: Routes = [
@@ -9,20 +12,24 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'home',
+        path: PathConstants.HOME,
         component: HomeComponent,
       },
       {
-        path: 'settings',
+        path: PathConstants.SETTINGS,
         component: HomeComponent,
       },
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', pathMatch: 'full', redirectTo: `/${PathConstants.LOGIN}` },
     ],
+  },
+  {
+    component: LoginComponent,
+    path: PathConstants.LOGIN,
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/home',
+    redirectTo: `/${PathConstants.LOGIN}`,
   },
   { path: '**', redirectTo: '' },
 ];

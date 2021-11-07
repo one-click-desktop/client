@@ -1,3 +1,6 @@
+const { pathsToModuleNameMapper } = require('ts-jest/utils')
+const { compilerOptions } = require('./tsconfig')
+
 module.exports = {
 
     preset: 'jest-preset-angular',
@@ -30,12 +33,7 @@ module.exports = {
         '<rootDir>/src/app/**/*.spec.ts'
     ],
 
-    moduleNameMapper: {
-        "@views/(.*)": "<rootDir>/src/app/views/$1",
-        "@components/(.*)": "<rootDir>/src/app/components/$1",
-        "@services/(.*)": "<rootDir>/src/app/services/$1",
-        "@testing/(.*)": "<rootDir>/src/app/testing/$1"
-    },
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
 
     restoreMocks: true,
     clearMocks: true,

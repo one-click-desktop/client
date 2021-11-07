@@ -1,0 +1,53 @@
+<section class="vh-100 background">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow">
+          <div class="card-body p-4 text-center">
+            <h3 class="mb-5">One Click Desktop</h3>
+
+            <form (ngSubmit)="onSubmit()" #form="ngForm">
+              <div class="form-outline mb-2">
+                <input
+                  type="login"
+                  id="loginInput"
+                  name="loginInput"
+                  class="form-control form-control-lg"
+                  [(ngModel)]="login.login"
+                  required
+                />
+                <label class="form-label" for="loginInput">Login</label>
+              </div>
+
+              <div class="form-outline mb-2">
+                <input
+                  type="password"
+                  id="passwordInput"
+                  name="passwordInput"
+                  class="form-control form-control-lg"
+                  [(ngModel)]="login.password"
+                  required
+                />
+                <label class="form-label" for="passwordInput">Password</label>
+              </div>
+
+              <div class="form-outline mb-2 error">
+                {{ error }}
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg btn-block"
+                [disabled]="!form.form.valid || processing"
+              >
+                Login
+              </button>
+
+              <button (click)="cont()">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

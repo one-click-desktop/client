@@ -2,22 +2,16 @@
   <div class="machines">
     <div class="machines-header">Available machines:</div>
     <div class="machines-content">
-      <div class="machines-entry machines-entry-cpu">
-        <span class="machines-entry-label">Normal:</span>
-        <span
-          class="machines-entry-value"
-          [class.machines-entry-value-zero]="!availableCpu"
-          >{{ availableCpu }}</span
-        >
-      </div>
-      <div class="machines-entry machines-entry-gpu">
-        <span class="machines-entry-label">GPU Accelerated:</span>
-        <span
-          class="machines-entry-value"
-          [class.machines-entry-value-zero]="!availableGpu"
-          >{{ availableGpu }}</span
-        >
-      </div>
+      <ng-container *ngIf="machines?.length || !loaded; else noMachines">
+        <div class="machines-entry" *ngFor="let machine of machines">
+          <span class="machines-entry-label">{{ machine.type }}:</span>
+          <span
+            class="machines-entry-value"
+            [class.machines-entry-value-zero]="!machine.amount"
+            >{{ machine.amount }}</span
+          >
+        </div>
+      </ng-container>
     </div>
   </div>
   <div class="home-buttons">
@@ -36,4 +30,14 @@
       Connect
     </button>
   </div>
+  <!-- !REMOVE -->
+  <button class="home-connect btn btn-primary" (click)="connect()">
+    Connect
+  </button>
 </main>
+
+<ng-template #noMachines>
+  <span class="machines-entry-label machines-entry-value-zero no-machines"
+    >No machines available</span
+  >
+</ng-template>

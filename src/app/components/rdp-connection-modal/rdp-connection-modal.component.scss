@@ -1,0 +1,34 @@
+$spinner-size: 3rem;
+
+.spinner {
+  font-size: $spinner-size;
+}
+
+.modal-body {
+  text-align: center;
+
+  &-header {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  &-content {
+    font-size: 0.9rem;
+  }
+}
+
+.rotate {
+  animation-name: rotate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

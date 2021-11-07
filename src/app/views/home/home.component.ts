@@ -1,39 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { MachinesService } from '@services/machines.service';
-import { setTimeout } from 'timers';
+
+import { timer } from 'rxjs';
+
+import { MachinesService } from '@api-module/api/api';
+import { Machines } from '@api-module/model/models';
+import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
+import { TimeConstants } from '@constants/time-constants';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  availableCpu: number = 0;
-  availableGpu: number = 0;
+  machines: Machines[];
 
   canConnect: boolean = false;
   canRefresh: boolean = false;
 
-  constructor(private machinesService: MachinesService) {}
+  loaded: boolean = false;
+
+  constructor(
+    private machinesService: MachinesService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getAvailableMachines();
   }
 
   getAvailableMachines(): void {
+    this.loaded = false;
     this.machinesService
-      .getAvailableMachines()
+      .getMachines()
       .subscribe(
-        (availableMachines) => {
-          this.availableCpu = availableMachines.cpu;
-          this.availableGpu = availableMachines.gpu;
+        (availableMachines: Machines[]) => {
+          this.machines = availableMachines ?? [];
         },
         (_) => {
-          this.availableCpu = this.availableGpu = 0;
+          this.machines = [];
         }
       )
       .add(() => {
-        this.canConnect = !!(this.availableCpu || this.availableGpu);
-        setTimeout(() => (this.canRefresh = true), 1000);
+        this.canConnect =
+          this.machines?.some((machine) => machine.amount) ?? false;
+        timer(TimeConstants.REFRESH_WAIT_TIME).subscribe(
+          () => (this.canRefresh = true)
+        );
+        this.loaded = true;
       });
   }
 
@@ -43,6 +57,14 @@ export class HomeComponent implements OnInit {
   }
 
   connect(): void {
-    //TODO: add implementation
+    const modalRef = this.modalService.open(ConnectModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+    });
+    if (modalRef) {
+      modalRef.componentInstance.availableTypes = this.machines?.map(
+        (machine) => machine.type
+      );
+    }
   }
 }
