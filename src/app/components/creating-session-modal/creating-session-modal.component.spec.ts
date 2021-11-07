@@ -1,13 +1,15 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SessionService } from '@api-module/api/api';
-import { MachineType, SessionStatus } from '@api-module/model/models';
+import { By } from '@angular/platform-browser';
+
+import { Chance } from 'chance';
 import { of, Subscription, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
-import { Chance } from 'chance';
+
+import { SessionService } from '@api-module/api/api';
+import { MachineType, SessionStatus } from '@api-module/model/models';
 
 import { CreatingSessionModalComponent } from './creating-session-modal.component';
-import { By } from '@angular/platform-browser';
 
 const chance = new Chance();
 

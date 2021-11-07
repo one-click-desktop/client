@@ -1,12 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+import { By } from '@angular/platform-browser';
+
 import { Chance } from 'chance';
+import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+
+import { MachineType } from '@api-module/model/models';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ConnectModalComponent } from './connect-modal.component';
-import { MachineType } from '@api-module/model/models';
-import { By } from '@angular/platform-browser';
 
 jest.mock('@ng-bootstrap/ng-bootstrap');
 

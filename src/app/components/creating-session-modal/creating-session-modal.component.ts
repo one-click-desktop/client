@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MachineType, Session, SessionStatus } from '@api-module/model/models';
-import { SessionService } from '@api-module/api/api';
-import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
+
 import { Subscription, timer } from 'rxjs';
+
+import { SessionService } from '@api-module/api/api';
+import { MachineType, Session, SessionStatus } from '@api-module/model/models';
+import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
 import { TimeConstants } from '@constants/time-constants';
 
 @Component({

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { MachineType } from '@api-module/model/models';
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
 

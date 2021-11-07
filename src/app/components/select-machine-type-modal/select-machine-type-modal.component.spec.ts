@@ -2,9 +2,12 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+
+import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+
 import { MachineType } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+
 import { SelectMachineTypeModalComponent } from './select-machine-type-modal.component';
 
 describe('ConnectModalComponent', () => {

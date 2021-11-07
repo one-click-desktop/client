@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Session } from '@api-module/model/models';
+
 import { Observable, throwError } from 'rxjs';
+
+import { Session } from '@api-module/model/models';
 import { ElectronService } from '@services/electron/electron.service';
 
 @Injectable({

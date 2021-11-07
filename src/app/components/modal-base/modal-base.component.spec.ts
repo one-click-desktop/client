@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { Chance } from 'chance';
+
 import { ModalBaseComponent } from './modal-base.component';
 
 const chance = new Chance();

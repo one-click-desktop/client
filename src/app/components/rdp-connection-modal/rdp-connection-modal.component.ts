@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { Subscription } from 'rxjs';
+
 import { Session } from '@api-module/model/models';
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
 import { RdpService } from '@services/rdp/rdp.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rdp-connection-modal',
