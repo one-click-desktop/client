@@ -49,5 +49,3 @@ Thumbs.db
 # Cypress
 cypress/videos
 cypress/screenshots
-
-/api-module
