@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from 'electron';
-import * as remote from '@electron/remote/main';
-import * as url from 'url';
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as url from 'url';
+
+import * as remote from '@electron/remote/main';
 
 // Initialize remote module
 remote.initialize();
@@ -18,6 +19,7 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     width: size.x,
     height: size.y,
+    resizable: serve || dev,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: serve ? true : false,
