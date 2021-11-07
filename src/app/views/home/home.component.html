@@ -1,0 +1,39 @@
+<main class="home">
+  <div class="machines">
+    <div class="machines-header">Available machines:</div>
+    <div class="machines-content">
+      <div class="machines-entry machines-entry-cpu">
+        <span class="machines-entry-label">Normal:</span>
+        <span
+          class="machines-entry-value"
+          [class.machines-entry-value-zero]="!availableCpu"
+          >{{ availableCpu }}</span
+        >
+      </div>
+      <div class="machines-entry machines-entry-gpu">
+        <span class="machines-entry-label">GPU Accelerated:</span>
+        <span
+          class="machines-entry-value"
+          [class.machines-entry-value-zero]="!availableGpu"
+          >{{ availableGpu }}</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="home-buttons">
+    <button
+      class="home-refresh btn btn-primary"
+      (click)="refresh()"
+      [disabled]="!canRefresh"
+    >
+      Refresh
+    </button>
+    <button
+      class="home-connect btn btn-primary"
+      (click)="connect()"
+      [disabled]="!canConnect"
+    >
+      Connect
+    </button>
+  </div>
+</main>

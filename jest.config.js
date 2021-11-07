@@ -30,5 +30,13 @@ module.exports = {
         '<rootDir>/src/app/**/*.spec.ts'
     ],
 
-    restoreMocks: true
+    moduleNameMapper: {
+        "@views/(.*)": "<rootDir>/src/app/views/$1",
+        "@components/(.*)": "<rootDir>/src/app/components/$1",
+        "@services/(.*)": "<rootDir>/src/app/services/$1",
+        "@testing/(.*)": "<rootDir>/src/app/testing/$1"
+    },
+
+    restoreMocks: true,
+    clearMocks: true,
 };

@@ -3,9 +3,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@views/*": ["src/app/views"],
+      "@views/*": ["src/app/views/*"],
       "@components/*": ["src/app/components/*"],
-      "@services/*": ["src/app/services/*"]
+      "@services/*": ["src/app/services/*"],
+      "@testing/*": ["src/app/testing/*"]
     },
     "outDir": "./dist/out-tsc",
     "module": "es2020",

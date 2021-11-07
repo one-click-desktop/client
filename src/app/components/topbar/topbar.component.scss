@@ -1,0 +1,45 @@
+@use "sass:math" as math;
+@use "src/app/styles/colors";
+
+$topbar-height: 3.3rem;
+$topbar-padding: 1rem;
+
+$logo-font-size: 1.75rem;
+$nav-font-size: 0.75rem;
+$icon-size: 1.5rem;
+$nav-margin: 2rem;
+$nav-items: 3;
+
+.topbar {
+  height: $topbar-height;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 $topbar-padding;
+  background-color: colors.$topbar-background-color;
+  align-items: center;
+
+  &-logo {
+    font-size: $logo-font-size;
+  }
+
+  .nav {
+    width: $nav-items * $icon-size + ($nav-items - 1) * $nav-margin;
+    justify-content: space-between;
+
+    &-link {
+      display: flex;
+      flex-direction: column;
+      padding: unset;
+      align-items: center;
+      cursor: pointer;
+
+      &-icon {
+        font-size: $icon-size;
+      }
+
+      &-text {
+        font-size: $nav-font-size;
+      }
+    }
+  }
+}

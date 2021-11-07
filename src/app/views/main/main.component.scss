@@ -1,0 +1,17 @@
+@use "/src/app/styles/colors";
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .header {
+    flex: 0 1 auto;
+  }
+
+  .content {
+    flex: 1 1 auto;
+    flex-basis: 0;
+    background-color: colors.$background-color;
+  }
+}
