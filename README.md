@@ -1,27 +1,36 @@
 # OneClickDesktopClient
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.9.
+Client application for OneClickDesktop project. Allows user to login, request session and connect to it.
 
-## Development server
+Created using Angular + Electron.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Development
 
-## Code scaffolding
+First run `npm install` to install all required packages.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run:
+
+- `npm run ng:serve` to start application in web mode on `http://localhost:4200/`.
+
+- `npm run electron:serve` to serve app in electron. Opens new electron window.
+
+- `npm run start` to run both above, where you can view app both through browser and electron app.
+
+- `npm run dev` or `npm run prod` to build and run application using only electron with dev or prod settings respectively.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run:
+
+- `npm run build:dev` or `npm run build:prod` to build angular app to `\dist` directory.
+
+- `npm run electron:build` will build angular app in production mode and build electron app to publishable image. NOT CONFIGURED PROPERLY YET.
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` to execute the unit tests via Jest. `npm run test:watch` and `npm run test:coverage` to run test with watch and coverage flags respectively.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Run `npm run cy:open` to open Cypress application for E2E tests. This allows to easily overseer and debug E2E tests.
+Run `npm run ng:e2e` to start CLI-only tests.
