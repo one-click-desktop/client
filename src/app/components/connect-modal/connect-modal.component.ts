@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { MachineType, Session } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MachineType, Session } from '@one-click-desktop/api-module';
 
 @Component({
   templateUrl: './connect-modal.component.html',

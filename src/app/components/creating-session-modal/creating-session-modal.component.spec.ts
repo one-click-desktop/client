@@ -6,14 +6,15 @@ import { Chance } from 'chance';
 import { of, Subscription, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { SessionService } from '@api-module/api/api';
-import { MachineType, SessionStatus } from '@api-module/model/models';
+import { SessionService } from '@one-click-desktop/api-module';
+import { MachineType, SessionStatus } from '@one-click-desktop/api-module';
+import { getSessionFixture } from '@testing/fixtures';
 
 import { CreatingSessionModalComponent } from './creating-session-modal.component';
 
 const chance = new Chance();
 
-jest.mock('@api-module/api/api');
+jest.mock('@one-click-desktop/api-module');
 
 describe('CreatingSessionModalComponent', () => {
   let component: CreatingSessionModalComponent;
@@ -47,7 +48,7 @@ describe('CreatingSessionModalComponent', () => {
 
   test('onSessionReady should call sessionReady emit with session and unsubscribe sessionStatusSub', () => {
     const spy = jest.spyOn(component.sessionReady, 'emit');
-    const session = { id: chance.guid(), type: MachineType.Cpu };
+    const session = getSessionFixture();
     component.session = session;
     component.sessionStatusSub = new Subscription();
     const spySub = jest.spyOn(component.sessionStatusSub, 'unsubscribe');
@@ -59,7 +60,7 @@ describe('CreatingSessionModalComponent', () => {
   });
 
   test('sessionReady should emit session', (done) => {
-    const session = { id: chance.guid(), type: MachineType.Cpu };
+    const session = getSessionFixture();
 
     component.sessionReady.subscribe((s) => {
       expect(s).toBe(session);
@@ -71,7 +72,7 @@ describe('CreatingSessionModalComponent', () => {
 
   test('onSessionPending should call getSessionStatus after SESSION_STATUS_WAIT_TIME ms and repeat', () => {
     jest.useFakeTimers();
-    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    component.session = getSessionFixture();
     sessionService.getSessionStatus.mockReturnValueOnce(throwError(''));
     const spy = jest.spyOn(component, 'getSessionStatus');
 
@@ -95,7 +96,7 @@ describe('CreatingSessionModalComponent', () => {
 
   test('cancelSessionShould call deleteSession, unsubscribe sessionStatusSub and close', () => {
     const spy = jest.spyOn(component, 'close');
-    const session = { id: chance.guid(), type: MachineType.Cpu };
+    const session = getSessionFixture();
     component.session = session;
     component.sessionStatusSub = new Subscription();
     const spySub = jest.spyOn(component.sessionStatusSub, 'unsubscribe');
@@ -159,7 +160,7 @@ describe('CreatingSessionModalComponent', () => {
     status: SessionStatus,
     error: boolean = false
   ): void {
-    const session = { id: chance.guid(), type: MachineType.Cpu, status };
+    const session = getSessionFixture({ status });
     const type = MachineType.Cpu;
     component.machineType = type;
     if (error) {
@@ -201,7 +202,7 @@ describe('CreatingSessionModalComponent', () => {
     status: SessionStatus,
     error: boolean = false
   ): void {
-    const session = { id: chance.guid(), type: MachineType.Cpu, status };
+    const session = getSessionFixture({ status });
     component.session = session;
     if (error) {
       sessionService.getSessionStatus.mockReturnValueOnce(throwError(''));
@@ -242,7 +243,7 @@ describe('CreatingSessionModalComponent', () => {
   });
 
   test('should call cancelSession when clicking cancel button', () => {
-    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    component.session = getSessionFixture();
     const button = debugElement.query(
       By.css('.modal-footer > .btn')
     ).nativeElement;

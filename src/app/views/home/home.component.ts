@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { timer } from 'rxjs';
 
-import { MachinesService } from '@api-module/api/api';
-import { Machines } from '@api-module/model/models';
 import { ConnectModalComponent } from '@components/connect-modal/connect-modal.component';
 import { TimeConstants } from '@constants/time-constants';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MachinesService } from '@one-click-desktop/api-module';
+import { Machines } from '@one-click-desktop/api-module';
 
 @Component({
   templateUrl: './home.component.html',

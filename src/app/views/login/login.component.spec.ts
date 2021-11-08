@@ -7,8 +7,8 @@ import { Chance } from 'chance';
 import { of, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { LoginService } from '@api-module/api/api';
 import { PathConstants } from '@constants/path-constants';
+import { LoginService } from '@one-click-desktop/api-module';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 
 import { LoginComponent } from './login.component';
@@ -17,7 +17,7 @@ const chance = new Chance();
 
 jest.mock('@angular/router');
 jest.mock('@services/configuration/configuration.service');
-jest.mock('@api-module/api/api');
+jest.mock('@one-click-desktop/api-module');
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

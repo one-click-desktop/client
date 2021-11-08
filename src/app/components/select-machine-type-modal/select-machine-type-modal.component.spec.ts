@@ -5,8 +5,8 @@ import { By } from '@angular/platform-browser';
 
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { MachineType } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MachineType } from '@one-click-desktop/api-module';
 
 import { SelectMachineTypeModalComponent } from './select-machine-type-modal.component';
 

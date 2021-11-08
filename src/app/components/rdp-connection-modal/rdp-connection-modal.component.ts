@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { Session } from '@api-module/model/models';
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
+import { Session } from '@one-click-desktop/api-module';
 import { RdpService } from '@services/rdp/rdp.service';
 
 @Component({

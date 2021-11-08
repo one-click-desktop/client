@@ -7,14 +7,14 @@ import { of, throwError } from 'rxjs';
 import { MockedObject } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
 
-import { MachinesService } from '@api-module/api/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MachinesService } from '@one-click-desktop/api-module';
 
 import { HomeComponent } from './home.component';
 
 const chance = new Chance();
 
-jest.mock('@api-module/api/api');
+jest.mock('@one-click-desktop/api-module');
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 describe('HomeComponent', () => {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, throwError } from 'rxjs';
 
-import { Session } from '@api-module/model/models';
+import { Session } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 
 @Injectable({

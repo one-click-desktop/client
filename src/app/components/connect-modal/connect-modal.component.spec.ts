@@ -5,8 +5,9 @@ import { By } from '@angular/platform-browser';
 import { Chance } from 'chance';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { MachineType } from '@api-module/model/models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MachineType } from '@one-click-desktop/api-module';
+import { getSessionFixture } from '@testing/fixtures';
 
 import { ConnectModalComponent } from './connect-modal.component';
 
@@ -107,7 +108,7 @@ describe('ConnectModalComponent', () => {
 
   describe('Creating session step', () => {
     test('sessionCreated should set session and set step to two', () => {
-      const session = { id: chance.guid(), type: MachineType.Cpu };
+      const session = getSessionFixture();
       component.session = null;
       component.step = null;
 
@@ -148,7 +149,7 @@ describe('ConnectModalComponent', () => {
     });
 
     test('should call typeSelected with type when typeSelected event raised', () => {
-      const session = { id: chance.guid(), type: MachineType.Cpu };
+      const session = getSessionFixture();
       const spy = jest.spyOn(component, 'sessionCreated');
       component.step = 1;
       fixture.detectChanges();

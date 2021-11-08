@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { Chance } from 'chance';
 import { mocked, MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 
-import { MachineType, Session } from '@api-module/model/models';
+import { Session } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
+import { getSessionFixture } from '@testing/fixtures';
 
 import { RdpService } from './rdp.service';
 
@@ -43,7 +44,7 @@ describe('RdpService', () => {
     let session: Session;
 
     beforeEach(() => {
-      session = { id: chance.guid(), type: MachineType.Cpu };
+      session = getSessionFixture();
       jest.spyOn(electronService, 'isElectronApp', 'get').mockReturnValue(true);
     });
 

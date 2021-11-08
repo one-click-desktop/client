@@ -6,8 +6,8 @@ import { Chance } from 'chance';
 import { Observable, of, Subscription } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { MachineType } from '@api-module/model/models';
 import { RdpService } from '@services/rdp/rdp.service';
+import { getSessionFixture } from '@testing/fixtures';
 
 import { RdpConnectionModalComponent } from './rdp-connection-modal.component';
 
@@ -122,7 +122,7 @@ describe('RdpConnectionModalComponent', () => {
   });
 
   test('startRdpSession should call createRdpConnection with session', () => {
-    const session = { id: chance.guid(), type: MachineType.Cpu };
+    const session = getSessionFixture();
     component.session = session;
 
     component.startRdpSession();
@@ -131,7 +131,7 @@ describe('RdpConnectionModalComponent', () => {
   });
 
   test('startRdpSession should set isConnected to true when value is emitted', () => {
-    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    component.session = getSessionFixture();
     component.isConnected = null;
     rdpService.createRdpConnection.mockReturnValueOnce(
       new Observable((sub) => sub.next())
@@ -143,7 +143,7 @@ describe('RdpConnectionModalComponent', () => {
   });
 
   test('startRdpSession should set isError to true when error emitted', () => {
-    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    component.session = getSessionFixture();
     component.isError = null;
     rdpService.createRdpConnection.mockReturnValueOnce(
       new Observable((sub) => sub.error())
@@ -155,7 +155,7 @@ describe('RdpConnectionModalComponent', () => {
   });
 
   test('startRdpSession should call endSession when complete emitted', () => {
-    component.session = { id: chance.guid(), type: MachineType.Cpu };
+    component.session = getSessionFixture();
     rdpService.createRdpConnection.mockReturnValueOnce(
       new Observable((sub) => sub.complete())
     );

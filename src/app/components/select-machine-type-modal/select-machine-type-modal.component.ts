@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { MachineType } from '@api-module/model/models';
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
+import { MachineType } from '@one-click-desktop/api-module';
 
 @Component({
   selector: 'app-select-machine-type-modal',

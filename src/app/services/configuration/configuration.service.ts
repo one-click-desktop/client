@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Configuration } from '@api-module/configuration';
 import { APP_CONFIG } from '@environments/environment';
+import { Configuration } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 
 @Injectable({

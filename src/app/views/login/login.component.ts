@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoginService } from '@api-module/api/api';
-import { Login } from '@api-module/model/models';
 import { PathConstants } from '@constants/path-constants';
+import { LoginService } from '@one-click-desktop/api-module';
+import { Login } from '@one-click-desktop/api-module';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 
 @Component({

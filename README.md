@@ -4,6 +4,10 @@ Client application for OneClickDesktop project. Allows user to login, request se
 
 Created using Angular + Electron.
 
+## Requirements
+
+- [Node.js](https://nodejs.org/en/)
+
 ## Development
 
 First run `npm install` to install all required packages.
