@@ -1,0 +1,24 @@
+name: NPM Build Test
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  client-build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint
+        run: npm run lint
+      - name: Run unit test
+        run: npm run test:coverage
+      - name: Build module
+        run: npm run ng:build # add electron build

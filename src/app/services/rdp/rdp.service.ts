@@ -42,11 +42,11 @@ export class RdpService {
     });
   }
 
-  private spawnWindowsRdpProcess(session: Session): any {
+  private spawnWindowsRdpProcess(_session: Session): any {
     return this.electronService.childProcess.spawn('mstsc.exe');
   }
 
-  private spawnLinuxRdpProcess(session: Session): any {
+  private spawnLinuxRdpProcess(_session: Session): any {
     //TODO
     return this.electronService.childProcess.spawn('mstsc.exe');
   }

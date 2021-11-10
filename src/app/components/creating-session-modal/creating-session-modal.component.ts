@@ -94,7 +94,7 @@ export class CreatingSessionModalComponent
     ).subscribe(() => this.getSessionStatus());
   }
 
-  onError(error?: any): void {
+  onError(_error?: any): void {
     this.waitingForSession = false;
   }
 
