@@ -36,7 +36,7 @@
     "@electron/remote": "^2.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
-    "@one-click-desktop/api-module": "^1.0.0",
+    "@one-click-desktop/api-module": "^1.0.3",
     "bootstrap": "^4.5.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",

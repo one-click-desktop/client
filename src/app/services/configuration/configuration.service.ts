@@ -17,8 +17,9 @@ export class ConfigurationService {
 
   static getConfiguration(): Configuration {
     const a = new Configuration({
-      accessToken: ConfigurationService.getToken,
+      withCredentials: true,
       basePath: ConfigurationService.basePath,
+      credentials: { bearerAuth: ConfigurationService.getToken },
     });
     return a;
   }

@@ -29,10 +29,10 @@ describe('ConfigurationService', () => {
     expect(service).toBeTruthy();
   });
 
-  test('getConfiguration should return configuration with function as accessToken', () => {
+  test('getConfiguration should return configuration with function as credentials.bearerAuth', () => {
     const conf = ConfigurationService.getConfiguration();
 
-    expect(typeof conf.accessToken).toBe('function');
+    expect(typeof conf.credentials.bearerAuth).toBe('function');
   });
 
   test('getConfiguration should return accessToken as function returning set token', () => {
@@ -41,7 +41,7 @@ describe('ConfigurationService', () => {
 
     const conf = ConfigurationService.getConfiguration();
 
-    expect((conf.accessToken as () => string)()).toBe(token);
+    expect((conf.credentials.bearerAuth as () => string)()).toBe(token);
   });
 
   test('getConfiguration should return set basePath', () => {

@@ -3,8 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
-
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MachineType } from '@one-click-desktop/api-module';
 
