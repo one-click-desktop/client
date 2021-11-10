@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { PathConstants } from '@constants/path-constants';
+import { LoggedInService } from '@services/loggedin/loggedin.service';
 
 @Component({
   selector: 'app-topbar',
@@ -10,9 +11,9 @@ import { PathConstants } from '@constants/path-constants';
 export class TopbarComponent {
   paths = PathConstants;
 
-  constructor() {}
+  constructor(private loggedInService: LoggedInService) {}
 
-  logOut(): void {
-    //TODO: add loginService call
+  logout(): void {
+    this.loggedInService.logout();
   }
 }
