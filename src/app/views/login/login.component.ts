@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { PathConstants } from '@constants/path-constants';
-import { LoginService } from '@one-click-desktop/api-module';
-import { Login } from '@one-click-desktop/api-module';
-import { ConfigurationService } from '@services/configuration/configuration.service';
+import { Login, LoginService } from '@one-click-desktop/api-module';
+import { LoggedInService } from '@services/loggedin/loggedin.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -18,8 +15,7 @@ export class LoginComponent {
 
   constructor(
     private loginService: LoginService,
-    private settingsService: ConfigurationService,
-    private router: Router
+    private loggedInService: LoggedInService
   ) {
     this.login = {
       login: null,
@@ -34,8 +30,7 @@ export class LoginComponent {
       .login(this.login)
       .subscribe(
         (token) => {
-          this.settingsService.token = token.token;
-          this.router.navigate([PathConstants.HOME]);
+          this.loggedInService.login(this.login, token.token);
         },
         (error) => {
           this.error =
@@ -51,7 +46,6 @@ export class LoginComponent {
 
   // !REMOVE
   cont(): void {
-    this.settingsService.token = 'abc';
-    this.router.navigate([PathConstants.HOME]);
+    this.loggedInService.login(this.login, 'abc');
   }
 }

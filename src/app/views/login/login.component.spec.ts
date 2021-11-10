@@ -1,37 +1,33 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { Chance } from 'chance';
 import { of, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
-import { PathConstants } from '@constants/path-constants';
 import { LoginService } from '@one-click-desktop/api-module';
-import { ConfigurationService } from '@services/configuration/configuration.service';
+import { LoggedInService } from '@services/loggedin/loggedin.service';
 
 import { LoginComponent } from './login.component';
 
 const chance = new Chance();
 
-jest.mock('@angular/router');
-jest.mock('@services/configuration/configuration.service');
+jest.mock('@services/loggedin/loggedin.service');
 jest.mock('@one-click-desktop/api-module');
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let debugElement: DebugElement;
-  let router: MockedObject<Router>;
-  let configService: MockedObject<ConfigurationService>;
+  let loggedInService: MockedObject<LoggedInService>;
   let loginService: MockedObject<LoginService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [LoginComponent],
-      providers: [LoginService, ConfigurationService, Router],
+      providers: [LoginService, LoggedInService],
     }).compileComponents();
   });
 
@@ -40,11 +36,8 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
 
-    router = mocked(TestBed.inject(Router));
-    configService = mocked(TestBed.inject(ConfigurationService));
-    Object.defineProperty(configService, 'token', {
-      set: jest.fn(),
-    });
+    loggedInService = mocked(TestBed.inject(LoggedInService));
+
     loginService = mocked(TestBed.inject(LoginService));
     loginService.login.mockImplementation(() => of());
   });
@@ -65,15 +58,15 @@ describe('LoginComponent', () => {
     expect(loginService.login).toHaveBeenCalled();
   });
 
-  test('onSubmit should set token and call router navigate when login succeeds', () => {
+  test('onSubmit should call login when login succeeds', () => {
     const token = chance.string();
-    const spy = jest.spyOn(configService, 'token', 'set');
+    const login = { login: chance.string(), password: chance.string() };
     loginService.login.mockReturnValueOnce(of({ token: token } as any));
+    component.login = login;
 
     component.onSubmit();
 
-    expect(spy).toHaveBeenCalledWith(token);
-    expect(router.navigate).toHaveBeenCalledWith([PathConstants.HOME]);
+    expect(loggedInService.login).toHaveBeenCalledWith(login, token);
   });
 
   test('onSubmit should set error string to login incorrect if error has code 401', () => {

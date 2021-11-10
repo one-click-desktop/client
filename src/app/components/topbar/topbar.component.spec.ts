@@ -10,15 +10,21 @@ import { By } from '@angular/platform-browser';
 import { RouterLinkWithHref } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
+
 import { PathConstants } from '@constants/path-constants';
+import { LoggedInService } from '@services/loggedin/loggedin.service';
 
 import { TopbarComponent } from './topbar.component';
+
+jest.mock('@services/loggedin/loggedin.service');
 
 describe('TopbarComponent', () => {
   let component: TopbarComponent;
   let fixture: ComponentFixture<TopbarComponent>;
   let debugElement: DebugElement;
   let location: Location;
+  let loggedInService: MockedObject<LoggedInService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -35,6 +41,7 @@ describe('TopbarComponent', () => {
           },
         ]),
       ],
+      providers: [LoggedInService],
     }).compileComponents();
   });
 
@@ -46,6 +53,8 @@ describe('TopbarComponent', () => {
     fixture.detectChanges();
 
     location = TestBed.inject(Location);
+
+    loggedInService = mocked(TestBed.inject(LoggedInService));
   });
 
   test('should create', () => {
@@ -99,7 +108,20 @@ describe('TopbarComponent', () => {
     expect(routerLinkDebug.nativeElement.classList).toContain('disabled');
   }
 
-  test('should call logout service when clicked logout', () => {
-    //TODO: add test after
+  test('should call logout when logout clicked', () => {
+    const spy = jest.spyOn(component, 'logout');
+    const logout = debugElement
+      .queryAll(By.css('.nav-link'))
+      .filter((nav) => nav.nativeElement.textContent === 'Log out')[0];
+
+    logout.nativeElement.click();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  test('logout should call logout', () => {
+    component.logout();
+
+    expect(loggedInService.logout).toHaveBeenCalled();
   });
 });
