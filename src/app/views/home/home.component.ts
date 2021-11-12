@@ -6,14 +6,14 @@ import { ConnectModalComponent } from '@components/connect-modal/connect-modal.c
 import { TimeConstants } from '@constants/time-constants';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MachinesService } from '@one-click-desktop/api-module';
-import { Machines } from '@one-click-desktop/api-module';
+import { Machine } from '@one-click-desktop/api-module';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  machines: Machines[];
+  machines: Machine[];
 
   canConnect: boolean = false;
   canRefresh: boolean = false;
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
     this.machinesService
       .getMachines()
       .subscribe(
-        (availableMachines: Machines[]) => {
+        (availableMachines: Machine[]) => {
           this.machines = availableMachines ?? [];
         },
         (_) => {
