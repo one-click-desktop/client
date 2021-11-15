@@ -4,7 +4,7 @@
     <div class="machines-content">
       <ng-container *ngIf="machines?.length || !loaded; else noMachines">
         <div class="machines-entry" *ngFor="let machine of machines">
-          <span class="machines-entry-label">{{ machine.type }}:</span>
+          <span class="machines-entry-label">{{ machine.type.name }}:</span>
           <span
             class="machines-entry-value"
             [class.machines-entry-value-zero]="!machine.amount"

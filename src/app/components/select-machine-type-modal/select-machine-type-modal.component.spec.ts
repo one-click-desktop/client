@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MachineType } from '@one-click-desktop/api-module';
+import { getMachineTypeFixture } from '@testing/fixtures';
 
 import { SelectMachineTypeModalComponent } from './select-machine-type-modal.component';
 
@@ -33,38 +33,6 @@ describe('ConnectModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  test('isDisabled should return true if type is not in availableTypes list', () => {
-    component.availableTypes = ['cpu'];
-
-    const disabled = component.isDisabled('gpu');
-
-    expect(disabled).toBeTruthy();
-  });
-
-  test('isDisabled should return false if type is in availableTypes list', () => {
-    component.availableTypes = ['gpu'];
-
-    const disabled = component.isDisabled('gpu');
-
-    expect(disabled).toBeFalsy();
-  });
-
-  test('isDisabled should return true if availableTypes is null', () => {
-    component.availableTypes = null;
-
-    const disabled = component.isDisabled('gpu');
-
-    expect(disabled).toBeTruthy();
-  });
-
-  test('should set machineTypes to key value list from MachineType', () => {
-    const keys = component.machineTypes.map((type) => type.key);
-    const values = component.machineTypes.map((type) => type.value);
-
-    expect(keys).toEqual(Object.keys(MachineType));
-    expect(values).toEqual(Object.values(MachineType));
-  });
-
   test('should call close when clicking on "x"', () => {
     const spy = jest.spyOn(component, 'close');
 
@@ -74,21 +42,21 @@ describe('ConnectModalComponent', () => {
   });
 
   test('should show all machineTypes as radio buttons', () => {
-    component.machineTypes = [
-      { key: '', value: 'cpu' },
-      { key: '', value: 'gpu' },
+    component.availableTypes = [
+      getMachineTypeFixture(),
+      getMachineTypeFixture(),
     ];
 
     fixture.detectChanges();
 
     const radios = debugElement.queryAll(By.css('input[type=radio]'));
 
-    expect(radios.length).toBe(component.machineTypes.length);
+    expect(radios.length).toBe(component.availableTypes.length);
   });
 
   test('onSubmit should call typeSelected emit with selected type', () => {
     const spy = jest.spyOn(component.typeSelected, 'emit');
-    const type = MachineType.Cpu;
+    const type = getMachineTypeFixture();
     component.type = type;
 
     component.onSubmit();
@@ -97,7 +65,7 @@ describe('ConnectModalComponent', () => {
   });
 
   test('typeSelected should emit type', (done) => {
-    const type = MachineType.Cpu;
+    const type = getMachineTypeFixture();
 
     component.typeSelected.subscribe((t) => {
       expect(t).toBe(type);

@@ -7,8 +7,8 @@ import { of, Subscription, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
 import { SessionService } from '@one-click-desktop/api-module';
-import { MachineType, SessionStatus } from '@one-click-desktop/api-module';
-import { getSessionFixture } from '@testing/fixtures';
+import { SessionStatus } from '@one-click-desktop/api-module';
+import { getMachineTypeFixture, getSessionFixture } from '@testing/fixtures';
 
 import { CreatingSessionModalComponent } from './creating-session-modal.component';
 
@@ -109,7 +109,7 @@ describe('CreatingSessionModalComponent', () => {
   });
 
   test('createSession should set waitingForSession to true and call getSession', () => {
-    const type = MachineType.Cpu;
+    const type = getMachineTypeFixture();
     component.machineType = type;
     component.waitingForSession = null;
 
@@ -161,7 +161,7 @@ describe('CreatingSessionModalComponent', () => {
     error: boolean = false
   ): void {
     const session = getSessionFixture({ status });
-    const type = MachineType.Cpu;
+    const type = getMachineTypeFixture();
     component.machineType = type;
     if (error) {
       sessionService.getSession.mockReturnValueOnce(throwError(''));

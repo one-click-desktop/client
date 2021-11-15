@@ -11,19 +11,18 @@
 </div>
 <form #form="ngForm" (ngSubmit)="onSubmit()">
   <div class="modal-body">
-    <div class="form-check" *ngFor="let machineType of machineTypes">
+    <div class="form-check" *ngFor="let machineType of availableTypes">
       <label class="form-check-label">
         <input
           type="radio"
           class="form-check-input"
           name="type"
-          [id]="machineType.value"
-          [value]="machineType.value"
-          [attr.disabled]="isDisabled(machineType.value) || null"
+          [id]="machineType.code"
+          [value]="machineType"
           [(ngModel)]="type"
           required
         />
-        {{ machineType.key }}
+        {{ machineType.name }}
       </label>
     </div>
   </div>
