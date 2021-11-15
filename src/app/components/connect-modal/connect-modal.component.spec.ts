@@ -6,8 +6,7 @@ import { Chance } from 'chance';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MachineType } from '@one-click-desktop/api-module';
-import { getSessionFixture } from '@testing/fixtures';
+import { getMachineTypeFixture, getSessionFixture } from '@testing/fixtures';
 
 import { ConnectModalComponent } from './connect-modal.component';
 
@@ -53,7 +52,7 @@ describe('ConnectModalComponent', () => {
 
   describe('Select machine type step', () => {
     test('typeSelected should set selectedType and set step to one', () => {
-      const type = MachineType.Cpu;
+      const type = getMachineTypeFixture();
       component.selectedType = null;
       component.step = null;
 
@@ -94,7 +93,7 @@ describe('ConnectModalComponent', () => {
     });
 
     test('should call typeSelected with type when typeSelected event raised', () => {
-      const type = MachineType.Cpu;
+      const type = getMachineTypeFixture();
       const spy = jest.spyOn(component, 'typeSelected');
       component.step = 0;
       fixture.detectChanges();

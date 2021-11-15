@@ -15,18 +15,10 @@ export class SelectMachineTypeModalComponent extends ModalBaseComponent {
   @Output()
   typeSelected: EventEmitter<MachineType> = new EventEmitter();
 
-  machineTypes: { key: string; value: MachineType }[];
   type: MachineType;
 
   constructor() {
     super();
-    this.machineTypes = Object.keys(MachineType).map((type) => {
-      return { key: type, value: MachineType[type] };
-    });
-  }
-
-  isDisabled(type: MachineType): boolean {
-    return !this.availableTypes?.includes(type);
   }
 
   onSubmit(): void {

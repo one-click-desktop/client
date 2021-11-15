@@ -62,9 +62,9 @@ export class HomeComponent implements OnInit {
       keyboard: false,
     });
     if (modalRef) {
-      modalRef.componentInstance.availableTypes = this.machines?.map(
-        (machine) => machine.type
-      );
+      modalRef.componentInstance.availableTypes = this.machines
+        ?.filter((machine) => machine.amount > 0)
+        .map((machine) => machine.type);
     }
   }
 }

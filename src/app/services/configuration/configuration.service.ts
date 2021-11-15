@@ -16,12 +16,11 @@ export class ConfigurationService {
   constructor(private electronService: ElectronService) {}
 
   static getConfiguration(): Configuration {
-    const a = new Configuration({
+    return new Configuration({
       withCredentials: true,
       basePath: ConfigurationService.basePath,
       credentials: { bearerAuth: ConfigurationService.getToken },
     });
-    return a;
   }
 
   static getToken(): string {
@@ -30,6 +29,8 @@ export class ConfigurationService {
 
   loadConfiguration(): void {
     const file = this.electronService.readFile(APP_CONFIG.configPath, 'utf-8');
+    this.basePath = APP_CONFIG.basePath;
+
     if (!file) {
       this.electronService.showDialog(
         'Invalid configuration',

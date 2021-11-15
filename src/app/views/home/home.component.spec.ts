@@ -9,6 +9,7 @@ import { mocked } from 'ts-jest/utils';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MachinesService } from '@one-click-desktop/api-module';
+import { getMachineFixture } from '@testing/fixtures';
 
 import { HomeComponent } from './home.component';
 
@@ -53,7 +54,7 @@ describe('HomeComponent', () => {
       fixture.detectChanges();
 
       const value = chance.natural({ min: 1 });
-      component.machines = [{ type: 'cpu', amount: value }];
+      component.machines = [getMachineFixture({ amount: value })];
 
       fixture.detectChanges();
 
@@ -64,7 +65,7 @@ describe('HomeComponent', () => {
     test('should give entry-value class zero if value is falsy', () => {
       fixture.detectChanges();
 
-      component.machines = [{ type: 'cpu', amount: 0 }];
+      component.machines = [getMachineFixture({ amount: 0 })];
 
       fixture.detectChanges();
 
@@ -173,6 +174,22 @@ describe('HomeComponent', () => {
       component.connect();
 
       expect(modalService.open).toHaveBeenCalled();
+    });
+
+    test('connect should set available modal availableTypes to machineTypes with amount geater than 0', () => {
+      const modal = {
+        componentInstance: { availableTypes: null },
+      };
+      modalService.open.mockReturnValueOnce(modal as any);
+      const value = chance.natural({ min: 1 });
+      component.machines = [
+        getMachineFixture({ amount: value }),
+        getMachineFixture({ amount: 0 }),
+      ];
+
+      component.connect();
+
+      expect(modal.componentInstance.availableTypes.length).toBe(1);
     });
 
     test('should set machines to empty array if subscribe error', () => {
