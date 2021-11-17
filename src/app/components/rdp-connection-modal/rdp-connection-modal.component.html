@@ -10,7 +10,7 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="connected" *ngIf="isConnected; else connecting">
+  <div class="connected" *ngIf="isConnected && !isError; else connecting">
     <div class="modal-body-header">RDP client started</div>
     <div class="modal-body-content">
       Close client or click below to end session

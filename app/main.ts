@@ -24,6 +24,7 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: serve ? true : false,
       contextIsolation: false,
+      webSecurity: !serve,
     },
   });
 

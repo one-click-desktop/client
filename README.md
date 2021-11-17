@@ -18,6 +18,8 @@ Run:
 
 - `npm run electron:serve` to serve app in electron. Opens new electron window.
 
+  > ⚠️ To prevent **CORS** errors **webSecurity** is disabled in serve mode.
+
 - `npm run start` to run both above, where you can view app both through browser and electron app.
 
 - `npm run dev` or `npm run prod` to build and run application using only electron with dev or prod settings respectively.
@@ -27,6 +29,8 @@ Run:
 Run:
 
 - `npm run build:dev` or `npm run build:prod` to build angular app to `\dist` directory.
+
+- `npm run electron:dev` or `npm run electron:prod` to build angular app and start electron app in specified configuration.
 
 - `npm run electron:build` will build angular app in production mode and build electron app to publishable image. NOT CONFIGURED PROPERLY YET.
 

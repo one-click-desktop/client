@@ -27,14 +27,19 @@ export class RdpService {
         ? this.spawnWindowsRdpProcess(session)
         : this.spawnLinuxRdpProcess(session);
 
-      if (this.process) {
-        subscriber.next();
-      } else {
+      if (!this.process) {
         subscriber.error('Failed to create process');
         return;
       }
 
-      this.process.on('error', (err) => subscriber.error(err));
+      this.process.on('spawn', () => {
+        console.log('spawn');
+        subscriber.next();
+      });
+      this.process.on('error', (err) => {
+        console.log(err);
+        subscriber.error(err);
+      });
       this.process.on('close', () => {
         subscriber.complete();
         this.process = null;
@@ -42,13 +47,16 @@ export class RdpService {
     });
   }
 
-  private spawnWindowsRdpProcess(_session: Session): any {
-    return this.electronService.childProcess.spawn('mstsc.exe');
+  private spawnWindowsRdpProcess(session: Session): any {
+    const cmd = 'mstsc.exe';
+    const args = [`-v:${session.address.address}:${session.address.port}`];
+    console.log(cmd, args);
+    return this.electronService.spawnChild(cmd, args);
   }
 
   private spawnLinuxRdpProcess(_session: Session): any {
     //TODO
-    return this.electronService.childProcess.spawn('mstsc.exe');
+    return this.electronService.spawnChild('mstsc.exe');
   }
 
   endRdpConnection(): void {

@@ -29,6 +29,12 @@ export class ElectronService {
     this.remote?.dialog.showErrorBox(title, message);
   }
 
+  spawnChild(cmd: string, args?: string[]): ChildProcess.ChildProcess {
+    return args
+      ? this.childProcess?.spawn(cmd, args)
+      : this.childProcess?.spawn(cmd);
+  }
+
   get isElectronApp(): boolean {
     return !!(window && window.process && window.process.type);
   }
