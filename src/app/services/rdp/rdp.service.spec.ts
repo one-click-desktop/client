@@ -23,11 +23,6 @@ describe('RdpService', () => {
     });
     service = TestBed.inject(RdpService);
     electronService = mocked(TestBed.inject(ElectronService), true);
-    electronService.childProcess = mocked(
-      jest.createMockFromModule('child_process'),
-      false
-    );
-    electronService.childProcess.spawn.mockReturnValue(null);
     Object.defineProperty(electronService, 'isElectronApp', {
       get: jest.fn(),
     });
@@ -85,45 +80,53 @@ describe('RdpService', () => {
     });
 
     test('should emit error when created process is null', (done) => {
-      electronService.childProcess.spawn.mockReturnValueOnce(null);
+      electronService.spawnChild.mockReturnValueOnce(null);
 
       call({
         done,
         error: (error) => {
           expect(error).toBe('Failed to create process');
-          expect(electronService.childProcess.spawn).toHaveBeenCalled();
+          expect(electronService.spawnChild).toHaveBeenCalled();
           done();
         },
       });
     });
 
-    test('should emit next when created process is not null', (done) => {
-      electronService.childProcess.spawn.mockReturnValueOnce({
-        on: jest.fn(),
+    test('should emit next when created process emits spawn', (done) => {
+      electronService.spawnChild.mockReturnValueOnce({
+        on: jest
+          .fn()
+          .mockImplementation((str: 'error' | 'close' | 'spawn', callback) => {
+            if (str === 'spawn') {
+              callback();
+            }
+          }),
       } as any);
 
       call({
         done,
         next: () => {
-          expect(electronService.childProcess.spawn).toHaveBeenCalled();
+          expect(electronService.spawnChild).toHaveBeenCalled();
           done();
         },
       });
     });
 
-    test('should emit error when created process returns error', (done) => {
-      electronService.childProcess.spawn.mockReturnValueOnce({
-        on: jest.fn().mockImplementation((str: 'error' | 'close', callback) => {
-          if (str === 'error') {
-            callback('Process error');
-          }
-        }),
+    test('should emit error when created process emits error', (done) => {
+      electronService.spawnChild.mockReturnValueOnce({
+        on: jest
+          .fn()
+          .mockImplementation((str: 'error' | 'close' | 'spawn', callback) => {
+            if (str === 'error') {
+              callback('Process error');
+            }
+          }),
       } as any);
 
       call({
         done,
         next: () => {
-          expect(electronService.childProcess.spawn).toHaveBeenCalled();
+          expect(electronService.spawnChild).toHaveBeenCalled();
         },
         error: (error) => {
           expect(error).toBe('Process error');
@@ -133,18 +136,20 @@ describe('RdpService', () => {
     });
 
     test('should emit complete when created process close', (done) => {
-      electronService.childProcess.spawn.mockReturnValueOnce({
-        on: jest.fn().mockImplementation((str: 'error' | 'close', callback) => {
-          if (str === 'close') {
-            callback();
-          }
-        }),
+      electronService.spawnChild.mockReturnValueOnce({
+        on: jest
+          .fn()
+          .mockImplementation((str: 'error' | 'close' | 'spawn', callback) => {
+            if (str === 'close') {
+              callback();
+            }
+          }),
       } as any);
 
       call({
         done,
         next: () => {
-          expect(electronService.childProcess.spawn).toHaveBeenCalled();
+          expect(electronService.spawnChild).toHaveBeenCalled();
         },
         complete: () => {
           done();
