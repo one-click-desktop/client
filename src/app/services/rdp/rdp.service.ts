@@ -54,9 +54,10 @@ export class RdpService {
     return this.electronService.spawnChild(cmd, args);
   }
 
-  private spawnLinuxRdpProcess(_session: Session): any {
-    //TODO
-    return this.electronService.spawnChild('mstsc.exe');
+  private spawnLinuxRdpProcess(session: Session): any {
+    this.electronService.exec(`remmina --set-option server=${session.address.address}:${session.address.address} --update-profile tmp.remmina`)
+
+    return this.electronService.spawnChild('remmina -c tmp.remmina');
   }
 
   endRdpConnection(): void {
