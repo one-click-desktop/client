@@ -45,7 +45,9 @@ export class RdpConnectionModalComponent
           this.isError = true;
         },
         () => {
-          this.endSession();
+          if (!this.isError) {
+            this.endSession();
+          }
         }
       );
   }
