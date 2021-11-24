@@ -2,6 +2,7 @@ import { Chance } from 'chance';
 
 import {
   IpAddress,
+  Login,
   Machine,
   MachineType,
   Session,
@@ -56,5 +57,17 @@ export function getMachineFixture(
   return {
     type: parameters?.type ?? getMachineTypeFixture(),
     amount: parameters?.amount ?? chance.natural(),
+  };
+}
+
+export interface LoginFixtureParameters {
+  login?: string;
+  password?: string;
+}
+
+export function getLoginFixture(parameters?: LoginFixtureParameters): Login {
+  return {
+    login: parameters?.login ?? chance.string(),
+    password: parameters?.password ?? chance.string(),
   };
 }
