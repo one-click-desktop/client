@@ -43,9 +43,4 @@ export class LoginComponent {
         this.processing = false;
       });
   }
-
-  // !REMOVE
-  cont(): void {
-    this.loggedInService.login(this.login, 'abc');
-  }
 }
