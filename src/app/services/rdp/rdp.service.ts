@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, throwError } from 'rxjs';
 
-import { Session } from '@one-click-desktop/api-module';
+import { Login, Session } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 
 @Injectable({
@@ -23,10 +23,7 @@ export class RdpService {
     }
 
     return new Observable((subscriber) => {
-      this.process = this.electronService.isWindows
-        ? this.spawnWindowsRdpProcess(session)
-        : this.spawnLinuxRdpProcess(session);
-
+      this.process = spawnRdpProcess(session);
       if (!this.process) {
         subscriber.error('Failed to create process');
         return;
@@ -47,6 +44,19 @@ export class RdpService {
     });
   }
 
+  private spawnRdpProcess(session: Session, login: Login): any {
+    let cmd, args;
+    if (this.electronService.isWindows) {
+      cmd = 'mstsc.exe';
+      args = [`-v:${session.address.address}:${session.address.port}`];
+    } else if (this.electronService.isLinux) {
+      cmd = 'xfreerdp';
+      args = [`/v:${session.address.address}:${session.address.port}`];
+    } else {
+      return null;
+    }
+  }
+
   private spawnWindowsRdpProcess(session: Session): any {
     const cmd = 'mstsc.exe';
     const args = [`-v:${session.address.address}:${session.address.port}`];
@@ -55,7 +65,9 @@ export class RdpService {
   }
 
   private spawnLinuxRdpProcess(session: Session): any {
-    this.electronService.exec(`remmina --set-option server=${session.address.address}:${session.address.address} --update-profile tmp.remmina`)
+    this.electronService.exec(
+      `remmina --set-option server=${session.address.address}:${session.address.address} --update-profile tmp.remmina`
+    );
 
     return this.electronService.spawnChild('remmina -c tmp.remmina');
   }

@@ -46,4 +46,8 @@ export class ElectronService {
   get isWindows(): boolean {
     return this.isElectronApp && window.process.platform === 'win32';
   }
+
+  get isLinux(): boolean {
+    return this.isElectronApp && window.process.platform === 'linux';
+  }
 }
