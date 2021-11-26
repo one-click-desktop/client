@@ -9,12 +9,15 @@ import { ConfigurationService } from '@services/configuration/configuration.serv
   providedIn: 'root',
 })
 export class LoggedInService {
+  private _login: Login;
+
   constructor(
     private configService: ConfigurationService,
     private router: Router
   ) {}
 
   login(login: Login, token: string): void {
+    this._login = login;
     this.configService.token = token;
     this.router.navigate([PathConstants.HOME]);
   }
@@ -22,5 +25,9 @@ export class LoggedInService {
   logout(): void {
     this.configService.token = null;
     this.router.navigate([PathConstants.LOGIN]);
+  }
+
+  getLogin(): Login {
+    return this._login;
   }
 }

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable, throwError } from 'rxjs';
 
-import { Session } from '@one-click-desktop/api-module';
+import { Login, Session } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
+import { LoggedInService } from '@services/loggedin/loggedin.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ import { ElectronService } from '@services/electron/electron.service';
 export class RdpService {
   private process: any;
 
-  constructor(private electronService: ElectronService) {}
+  constructor(
+    private electronService: ElectronService,
+    private loggedInService: LoggedInService
+  ) {}
 
   createRdpConnection(session: Session): Observable<void> {
     // we use child_process module which doesn't work for web environment
@@ -23,10 +27,10 @@ export class RdpService {
     }
 
     return new Observable((subscriber) => {
-      this.process = this.electronService.isWindows
-        ? this.spawnWindowsRdpProcess(session)
-        : this.spawnLinuxRdpProcess(session);
-
+      this.process = this.spawnRdpProcess(
+        session,
+        this.loggedInService.getLogin()
+      );
       if (!this.process) {
         subscriber.error('Failed to create process');
         return;
@@ -38,6 +42,7 @@ export class RdpService {
       });
       this.process.on('error', (err) => {
         console.log(err);
+
         subscriber.error(err);
       });
       this.process.on('close', () => {
@@ -47,16 +52,26 @@ export class RdpService {
     });
   }
 
-  private spawnWindowsRdpProcess(session: Session): any {
-    const cmd = 'mstsc.exe';
-    const args = [`-v:${session.address.address}:${session.address.port}`];
-    console.log(cmd, args);
-    return this.electronService.spawnChild(cmd, args);
-  }
+  private spawnRdpProcess(session: Session, login: Login): any {
+    const address = `${session.address.address}:${session.address.port}`;
 
-  private spawnLinuxRdpProcess(_session: Session): any {
-    //TODO
-    return this.electronService.spawnChild('mstsc.exe');
+    let cmd, args;
+    if (this.electronService.isWindows) {
+      cmd = 'mstsc.exe';
+      args = [`-v:${address}`];
+    } else if (this.electronService.isLinux) {
+      cmd = 'xfreerdp';
+      args = [
+        `/v:${address}`,
+        `/u:${login.login}`,
+        `/p:${login.password}`,
+        '/cert:tofu',
+      ];
+    } else {
+      return null;
+    }
+
+    return this.electronService.spawnChild(cmd, args);
   }
 
   endRdpConnection(): void {

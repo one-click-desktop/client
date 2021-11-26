@@ -34,9 +34,4 @@ export class ConnectModalComponent {
   sessionEnded(): void {
     this.close('Session ended');
   }
-
-  // !REMOVE
-  progress(): void {
-    this.step++;
-  }
 }

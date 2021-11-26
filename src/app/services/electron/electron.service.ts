@@ -35,11 +35,19 @@ export class ElectronService {
       : this.childProcess?.spawn(cmd);
   }
 
+  exec(cmd: string): ChildProcess.ChildProcess {
+    return this.childProcess?.exec(cmd);
+  }
+
   get isElectronApp(): boolean {
     return !!(window && window.process && window.process.type);
   }
 
   get isWindows(): boolean {
     return this.isElectronApp && window.process.platform === 'win32';
+  }
+
+  get isLinux(): boolean {
+    return this.isElectronApp && window.process.platform === 'linux';
   }
 }

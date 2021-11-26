@@ -6,6 +6,7 @@ import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
 import { PathConstants } from '@constants/path-constants';
 import { ConfigurationService } from '@services/configuration/configuration.service';
+import { getLoginFixture } from '@testing/fixtures';
 
 import { LoggedInService } from './loggedin.service';
 
@@ -46,12 +47,19 @@ describe('LoggedInService', () => {
     expect(router.navigate).toHaveBeenCalledWith([PathConstants.HOME]);
   });
 
-  test('login should clear token and call navigate', () => {
+  test('logout should clear token and call navigate', () => {
     const spy = jest.spyOn(configService, 'token', 'set');
 
     service.logout();
 
     expect(spy).toHaveBeenCalledWith(null);
     expect(router.navigate).toHaveBeenCalledWith([PathConstants.LOGIN]);
+  });
+
+  test('getLogin should return saved login info', () => {
+    const login = getLoginFixture();
+    service.login(login, chance.string());
+
+    expect(service.getLogin()).toBe(login);
   });
 });

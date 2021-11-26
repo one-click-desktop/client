@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -26,7 +33,7 @@ export class RdpConnectionModalComponent
 
   rdpSessionSub: Subscription;
 
-  constructor(private rdpService: RdpService) {
+  constructor(private rdpService: RdpService, private ngZone: NgZone) {
     super();
   }
 
@@ -39,13 +46,15 @@ export class RdpConnectionModalComponent
       .createRdpConnection(this.session)
       .subscribe(
         () => {
-          this.isConnected = true;
+          this.ngZone.run(() => (this.isConnected = true));
         },
         (_error) => {
-          this.isError = true;
+          this.ngZone.run(() => (this.isError = true));
         },
         () => {
-          this.endSession();
+          if (!this.isError) {
+            this.endSession();
+          }
         }
       );
   }
