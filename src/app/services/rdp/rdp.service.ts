@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, throwError } from 'rxjs';
 
-import { Login, Session } from '@one-click-desktop/api-module';
+import { IpAddress, Login } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 import { LoggedInService } from '@services/loggedin/loggedin.service';
 
@@ -17,7 +17,7 @@ export class RdpService {
     private loggedInService: LoggedInService
   ) {}
 
-  createRdpConnection(session: Session): Observable<void> {
+  createRdpConnection(address: IpAddress): Observable<void> {
     // we use child_process module which doesn't work for web environment
     if (!this.electronService.isElectronApp) {
       return throwError('Not an Electron app');
@@ -28,7 +28,7 @@ export class RdpService {
 
     return new Observable((subscriber) => {
       this.process = this.spawnRdpProcess(
-        session,
+        address,
         this.loggedInService.getLogin()
       );
       if (!this.process) {
@@ -52,17 +52,17 @@ export class RdpService {
     });
   }
 
-  private spawnRdpProcess(session: Session, login: Login): any {
-    const address = `${session.address.address}:${session.address.port}`;
+  private spawnRdpProcess(address: IpAddress, login: Login): any {
+    const machineAddress = `${address.address}:${address.port}`;
 
     let cmd, args;
     if (this.electronService.isWindows) {
       cmd = 'mstsc.exe';
-      args = [`-v:${address}`];
+      args = [`-v:${machineAddress}`];
     } else if (this.electronService.isLinux) {
       cmd = 'xfreerdp';
       args = [
-        `/v:${address}`,
+        `/v:${machineAddress}`,
         `/u:${login.login}`,
         `/p:${login.password}`,
         '/cert:tofu',

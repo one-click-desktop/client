@@ -62,17 +62,21 @@ describe('ConfigurationService', () => {
     expect(electronService.showDialog).toHaveBeenCalled();
   });
 
-  test('loadConfiguration should set basePath if loaded file is correct', () => {
+  test('loadConfiguration should set basePath and rabbitPath if loaded file is correct', () => {
     const file = chance.string();
     electronService.readFile.mockReturnValueOnce(file);
-    const spy = jest.spyOn(JSON, 'parse').mockReturnValueOnce({ basePath: '' });
-    const servSpy = jest.spyOn(service, 'basePath', 'set');
+    const spy = jest
+      .spyOn(JSON, 'parse')
+      .mockReturnValueOnce({ basePath: '', rabbitPath: '' });
+    const baseSpy = jest.spyOn(service, 'basePath', 'set');
+    const rabbitSpy = jest.spyOn(service, 'rabbitPath', 'set');
 
     service.loadConfiguration();
 
     expect(electronService.readFile).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
-    expect(servSpy).toHaveBeenCalled();
+    expect(baseSpy).toHaveBeenCalled();
+    expect(rabbitSpy).toHaveBeenCalled();
   });
 
   test('loadConfiguration should call showDialog if file is not correct', () => {

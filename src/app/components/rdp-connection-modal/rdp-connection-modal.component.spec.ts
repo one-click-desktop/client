@@ -6,6 +6,7 @@ import { Chance } from 'chance';
 import { Observable, of, Subscription } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
+import { RabbitMQService } from '@services/rabbitmq/rabbitmq.service';
 import { RdpService } from '@services/rdp/rdp.service';
 import { getSessionFixture } from '@testing/fixtures';
 
@@ -14,17 +15,19 @@ import { RdpConnectionModalComponent } from './rdp-connection-modal.component';
 const chance = new Chance();
 
 jest.mock('@services/rdp/rdp.service');
+jest.mock('@services/rabbitmq/rabbitmq.service');
 
 describe('RdpConnectionModalComponent', () => {
   let component: RdpConnectionModalComponent;
   let fixture: ComponentFixture<RdpConnectionModalComponent>;
   let debugElement: DebugElement;
   let rdpService: MockedObject<RdpService>;
+  let rabbitService: MockedObject<RabbitMQService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RdpConnectionModalComponent],
-      providers: [RdpService],
+      providers: [RdpService, RabbitMQService],
     }).compileComponents();
   });
 
@@ -33,9 +36,13 @@ describe('RdpConnectionModalComponent', () => {
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
 
-    rdpService = mocked(TestBed.inject(RdpService), false);
+    rdpService = mocked(TestBed.inject(RdpService));
     rdpService.createRdpConnection.mockImplementation(() => of());
     rdpService.endRdpConnection.mockImplementation();
+
+    rabbitService = mocked(TestBed.inject(RabbitMQService));
+    rabbitService.connect.mockImplementation(() => {});
+    rabbitService.disconnect.mockImplementation(() => {});
   });
 
   test('should create', () => {
@@ -127,7 +134,9 @@ describe('RdpConnectionModalComponent', () => {
 
     component.startRdpSession();
 
-    expect(rdpService.createRdpConnection).toHaveBeenCalledWith(session);
+    expect(rdpService.createRdpConnection).toHaveBeenCalledWith(
+      session.address
+    );
   });
 
   test('startRdpSession should set isConnected to true when value is emitted', () => {

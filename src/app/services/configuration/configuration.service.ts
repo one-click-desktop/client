@@ -10,8 +10,7 @@ import { ElectronService } from '@services/electron/electron.service';
 export class ConfigurationService {
   private static basePath: string;
   private static token: string;
-  private static login: string;
-  private static password: string;
+  private static rabbitPath: string;
 
   constructor(private electronService: ElectronService) {}
 
@@ -27,6 +26,10 @@ export class ConfigurationService {
     return ConfigurationService.token;
   }
 
+  static getRabbitPath(): string {
+    return ConfigurationService.rabbitPath;
+  }
+
   loadConfiguration(): void {
     const file = this.electronService.readFile(APP_CONFIG.configPath, 'utf-8');
     this.basePath = APP_CONFIG.basePath;
@@ -40,8 +43,9 @@ export class ConfigurationService {
     }
 
     const conf = JSON.parse(file);
-    if ('basePath' in conf) {
+    if ('basePath' in conf && 'rabbitPath' in conf) {
       this.basePath = conf.basePath;
+      this.rabbitPath = conf.rabbitPath;
     } else {
       this.electronService.showDialog(
         'Invalid configuration',
@@ -56,5 +60,9 @@ export class ConfigurationService {
 
   set basePath(basePath: string) {
     ConfigurationService.basePath = basePath;
+  }
+
+  set rabbitPath(rabbitPath: string) {
+    ConfigurationService.rabbitPath = rabbitPath;
   }
 }

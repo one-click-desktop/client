@@ -12,12 +12,14 @@ export class ElectronService {
   childProcess: typeof ChildProcess;
   remote: typeof Remote;
   fs: typeof Fs;
+  rabbit: any;
 
   constructor() {
     if (this.isElectronApp) {
       this.childProcess = window.require('child_process');
       this.remote = window.require('@electron/remote');
       this.fs = window.require('fs');
+      this.rabbit = window.require('amqplib/callback_api');
     }
   }
 
