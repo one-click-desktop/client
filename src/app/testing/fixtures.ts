@@ -25,10 +25,21 @@ export function getSessionFixture(
     id: parameters?.id ?? chance.guid(),
     type: parameters?.type ?? getMachineTypeFixture(),
     status: parameters?.status ?? SessionStatus.Pending,
-    address: parameters?.address ?? {
-      address: chance.ip(),
-      port: chance.normal(),
-    },
+    address: parameters?.address ?? getIpAddressFixture(),
+  };
+}
+
+export interface IpAddressFixtureParameters {
+  address?: string;
+  port?: number;
+}
+
+export function getIpAddressFixture(
+  parameters?: IpAddressFixtureParameters
+): IpAddress {
+  return {
+    address: parameters?.address ?? chance.ip(),
+    port: parameters?.port ?? chance.normal(),
   };
 }
 

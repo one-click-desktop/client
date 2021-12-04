@@ -3,10 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { Chance } from 'chance';
 import { mocked, MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 
-import { Session } from '@one-click-desktop/api-module';
+import { IpAddress } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 import { LoggedInService } from '@services/loggedin/loggedin.service';
-import { getLoginFixture, getSessionFixture } from '@testing/fixtures';
+import { getIpAddressFixture, getLoginFixture } from '@testing/fixtures';
 
 import { RdpService } from './rdp.service';
 
@@ -46,10 +46,10 @@ describe('RdpService', () => {
   });
 
   describe('createRdpConnection tests', () => {
-    let session: Session;
+    let address: IpAddress;
 
     beforeEach(() => {
-      session = getSessionFixture();
+      address = getIpAddressFixture();
       jest.spyOn(electronService, 'isElectronApp', 'get').mockReturnValue(true);
       jest.spyOn(electronService, 'isWindows', 'get').mockReturnValueOnce(true);
     });
@@ -73,7 +73,7 @@ describe('RdpService', () => {
         done.fail();
       },
     }: RdpCall): void {
-      service.createRdpConnection(session).subscribe(next, error, complete);
+      service.createRdpConnection(address).subscribe(next, error, complete);
     }
 
     test('should emit error when is not electron app', (done) => {
