@@ -33,8 +33,9 @@ export class LoginComponent {
           this.loggedInService.login(this.login, token.token);
         },
         (error) => {
+          console.log(error);
           this.error =
-            error?.code === 401
+            error?.status === 401
               ? 'Login or password incorrect'
               : 'Unable to connect to server';
         }

@@ -7,5 +7,6 @@
   "fixturesFolder": "cypress/fixtures",
   "baseUrl": "http://localhost:4200",
   "viewportWidth": 800,
-  "viewportHeight": 0
+  "viewportHeight": 600,
+  "chromeWebSecurity": false
 }

@@ -70,7 +70,7 @@ describe('LoginComponent', () => {
   });
 
   test('onSubmit should set error string to login incorrect if error has code 401', () => {
-    loginService.login.mockReturnValueOnce(throwError({ code: 401 }));
+    loginService.login.mockReturnValueOnce(throwError({ status: 401 }));
 
     component.onSubmit();
 

@@ -41,3 +41,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('checkNoModal', () => {
+  cy.url().should('include', '/home');
+  cy.get('body').should('not.have.class', 'modal-open');
+});
+
+Cypress.Commands.add('checkModal', () => {
+  cy.url().should('include', '/home');
+  cy.get('body').should('have.class', 'modal-open');
+});
+
+Cypress.Commands.add('openModal', () => {
+  cy.checkNoModal();
+  cy.contains('Connect').click();
+  cy.checkModal();
+});
+
+Cypress.Commands.add('openModalCreatingSession', () => {
+  cy.openModal();
+  cy.get('label').click();
+  cy.get('.modal-content button.btn').click();
+  cy.contains('Creating session...');
+});
