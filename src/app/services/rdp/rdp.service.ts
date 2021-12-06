@@ -39,9 +39,8 @@ export class RdpService {
 
       this.process.on('spawn', () => {
         console.log('spawn');
-        if (this.electronService.isWindows) {
-          subscriber.next();
-        }
+
+        subscriber.next();
       });
       this.process.on('error', (err) => {
         console.log(`Err: ${err}`);
@@ -51,17 +50,6 @@ export class RdpService {
       this.process.on('close', () => {
         subscriber.complete();
         this.process = null;
-      });
-      this.process.on('message', (data) => {
-        console.log(`Message: ${data}`);
-      });
-
-      this.process.stdout?.on('data', (data) => {
-        console.log(`Stdout: ${data}`);
-
-        if (RegexpConstants.CONNECTION_ESTABLISHED.test(data)) {
-          subscriber.next();
-        }
       });
 
       this.process.stderr?.on('data', (data) => {
