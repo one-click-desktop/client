@@ -1,0 +1,4 @@
+export const RegexpConstants = {
+  CONNECTION_ERROR: /ERRCONNECT_CONNECT_TRANSPORT_FAILED/,
+  CONNECTION_ESTABLISHED: /idk/,
+};
