@@ -38,35 +38,17 @@ export class RdpService {
       }
 
       this.process.on('spawn', () => {
-        console.log('spawn');
-        if (this.electronService.isWindows) {
           subscriber.next();
-        }
       });
       this.process.on('error', (err) => {
-        console.log(`Err: ${err}`);
-
         subscriber.error(err);
       });
       this.process.on('close', () => {
         subscriber.complete();
         this.process = null;
       });
-      this.process.on('message', (data) => {
-        console.log(`Message: ${data}`);
-      });
-
-      this.process.stdout?.on('data', (data) => {
-        console.log(`Stdout: ${data}`);
-
-        if (RegexpConstants.CONNECTION_ESTABLISHED.test(data)) {
-          subscriber.next();
-        }
-      });
 
       this.process.stderr?.on('data', (data) => {
-        console.log(`Stderr: ${data}`);
-
         if (RegexpConstants.CONNECTION_ERROR.test(data)) {
           subscriber.error('Connection error');
         }

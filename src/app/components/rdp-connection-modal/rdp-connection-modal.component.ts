@@ -57,8 +57,11 @@ export class RdpConnectionModalComponent
         () => {
           this.ngZone.run(() => (this.isConnected = true));
         },
-        (_error) => {
-          this.ngZone.run(() => (this.isError = true));
+        (error) => {
+          this.ngZone.run(() => { 
+            console.log(error); 
+            this.isError = true
+          });
         },
         () => {
           if (!this.isError) {
