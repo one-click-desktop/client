@@ -8,7 +8,8 @@
       "@services/*": ["src/app/services/*"],
       "@testing/*": ["src/app/testing/*"],
       "@constants/*": ["src/app/constants/*"],
-      "@environments/*": ["src/environments/*"]
+      "@environments/*": ["src/environments/*"],
+      "@interceptors/*": ["src/app/interceptors/*"]
     },
     "outDir": "./dist/out-tsc",
     "module": "es2020",

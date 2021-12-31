@@ -62,4 +62,18 @@ describe('LoggedInService', () => {
 
     expect(service.getLogin()).toBe(login);
   });
+
+  test('isLoggedIn should return false if token is falsy', () => {
+    jest.spyOn(ConfigurationService, 'getToken').mockReturnValueOnce(null);
+
+    expect(service.isLoggedIn()).toBeFalsy();
+  });
+
+  test('isLoggedIn should return true if token is not null', () => {
+    jest
+      .spyOn(ConfigurationService, 'getToken')
+      .mockReturnValueOnce(chance.string());
+
+    expect(service.isLoggedIn()).toBeTruthy();
+  });
 });

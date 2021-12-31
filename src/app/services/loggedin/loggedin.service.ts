@@ -30,4 +30,8 @@ export class LoggedInService {
   getLogin(): Login {
     return this._login;
   }
+
+  isLoggedIn(): boolean {
+    return !!ConfigurationService.getToken();
+  }
 }
