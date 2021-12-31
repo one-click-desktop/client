@@ -38,7 +38,7 @@ export class RdpService {
       }
 
       this.process.on('spawn', () => {
-          subscriber.next();
+        subscriber.next();
       });
       this.process.on('error', (err) => {
         subscriber.error(err);
