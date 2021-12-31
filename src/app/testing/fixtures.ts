@@ -45,7 +45,7 @@ export function getIpAddressFixture(
 
 export interface MachineTypeFixtureParameters {
   name?: string;
-  code?: number;
+  code?: string;
 }
 
 export function getMachineTypeFixture(
@@ -53,7 +53,7 @@ export function getMachineTypeFixture(
 ): MachineType {
   return {
     name: parameters?.name ?? chance.string(),
-    code: parameters?.code ?? chance.natural(),
+    code: parameters?.code ?? chance.string(),
   };
 }
 

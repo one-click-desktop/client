@@ -99,7 +99,9 @@ export class CreatingSessionModalComponent
   }
 
   cancelSession(): void {
-    this.sessionService.deleteSession(this.session.id).subscribe();
+    if (this.waitingForSession && this.session) {
+      this.sessionService.deleteSession(this.session.id).subscribe();
+    }
     this.sessionStatusSub?.unsubscribe();
     this.close('Cancel');
   }
