@@ -45,6 +45,10 @@ export class RdpConnectionModalComponent
 
   ngOnInit(): void {
     this.startRdpSession();
+    this.rabbitService.connect(
+      this.session?.id,
+      ConfigurationService.getRabbitPath()
+    );
   }
 
   startRdpSession(): void {
