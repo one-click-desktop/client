@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,6 +9,8 @@ import { ModalBaseComponent } from '@components/modal-base/modal-base.component'
 import { RdpConnectionModalComponent } from '@components/rdp-connection-modal/rdp-connection-modal.component';
 import { SelectMachineTypeModalComponent } from '@components/select-machine-type-modal/select-machine-type-modal.component';
 import { TopbarComponent } from '@components/topbar/topbar.component';
+import { CorsInterceptor } from '@interceptors/cors/cors.interceptor';
+import { HttpErrorInterceptor } from '@interceptors/http-error/http-error.interceptor';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiModule } from '@one-click-desktop/api-module';
 import { ConfigurationService } from '@services/configuration/configuration.service';
@@ -45,6 +47,16 @@ import { AppRoutingModule } from './app-routing.module';
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
       deps: [ConfigurationService],
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CorsInterceptor,
       multi: true,
     },
   ],

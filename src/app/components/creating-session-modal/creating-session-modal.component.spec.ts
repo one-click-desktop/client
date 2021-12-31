@@ -98,6 +98,7 @@ describe('CreatingSessionModalComponent', () => {
     const spy = jest.spyOn(component, 'close');
     const session = getSessionFixture();
     component.session = session;
+    component.waitingForSession = true;
     component.sessionStatusSub = new Subscription();
     const spySub = jest.spyOn(component.sessionStatusSub, 'unsubscribe');
 
