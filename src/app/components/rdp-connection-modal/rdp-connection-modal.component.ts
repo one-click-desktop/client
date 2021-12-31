@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 
 import { ModalBaseComponent } from '@components/modal-base/modal-base.component';
 import { Session } from '@one-click-desktop/api-module';
-import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RabbitMQService } from '@services/rabbitmq/rabbitmq.service';
 import { RdpService } from '@services/rdp/rdp.service';
 
@@ -45,6 +44,10 @@ export class RdpConnectionModalComponent
 
   ngOnInit(): void {
     this.startRdpSession();
+    // this.rabbitService.connect(
+    //   this.session?.id,
+    //   ConfigurationService.getRabbitPath()
+    // );
   }
 
   startRdpSession(): void {
@@ -52,14 +55,13 @@ export class RdpConnectionModalComponent
       .createRdpConnection(this.session?.address)
       .subscribe(
         () => {
-          this.rabbitService.connect(
-            this.session?.id,
-            ConfigurationService.getRabbitPath()
-          );
           this.ngZone.run(() => (this.isConnected = true));
         },
-        (_error) => {
-          this.ngZone.run(() => (this.isError = true));
+        (error) => {
+          this.ngZone.run(() => { 
+            console.log(error); 
+            this.isError = true
+          });
         },
         () => {
           if (!this.isError) {
