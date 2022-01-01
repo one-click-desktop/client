@@ -13,6 +13,7 @@ import { ModalBaseComponent } from '@components/modal-base/modal-base.component'
 import { Session } from '@one-click-desktop/api-module';
 import { RabbitMQService } from '@services/rabbitmq/rabbitmq.service';
 import { RdpService } from '@services/rdp/rdp.service';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 
 @Component({
   selector: 'app-rdp-connection-modal',
@@ -44,10 +45,10 @@ export class RdpConnectionModalComponent
 
   ngOnInit(): void {
     this.startRdpSession();
-    // this.rabbitService.connect(
-    //   this.session?.id,
-    //   ConfigurationService.getRabbitPath()
-    // );
+    this.rabbitService.connect(
+      this.session?.id,
+      ConfigurationService.getRabbitPath()
+    );
   }
 
   startRdpSession(): void {
