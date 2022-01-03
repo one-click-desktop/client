@@ -34,6 +34,7 @@
     "electron:prod": "npm run build:prod && electron .",
     "electron:build": "npm run build:prod && electron-builder build --publish=never",
     "version": "cross-var echo $npm_package_version",
+    "release": "npm run build:prod && electron-builder build --publish=always",
     "lint": "ng lint"
   },
   "private": true,
@@ -88,6 +89,7 @@
     "jest": "^27.3.0",
     "jest-preset-angular": "^10.0.1",
     "node-polyfill-webpack-plugin": "^1.1.4",
+    "node-zip": "^1.1.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
     "prettier-eslint": "^13.0.0",
