@@ -40,6 +40,7 @@ export class ConfigurationService {
         'Cannot load configuration file'
       );
       this.electronService.close();
+      return;
     }
 
     const conf = JSON.parse(file);
