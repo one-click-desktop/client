@@ -17,6 +17,7 @@ function createWindow(): BrowserWindow {
   const size = { x: 800, y: 600 };
 
   win = new BrowserWindow({
+    title: 'OneClickDesktop Client',
     width: size.x,
     height: size.y,
     resizable: serve || dev,

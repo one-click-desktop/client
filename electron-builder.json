@@ -1,0 +1,20 @@
+{
+  "appId": "com.electron.${name}",
+  "productName": "OneClickDesktop Client",
+  "asar": true,
+  "directories": {
+    "output": "release/"
+  },
+  "files": ["dist/**/*", "app/**/*", "!app/**/*.ts"],
+  "win": {
+    "icon": "dist/assets/icons",
+    "target": ["portable"]
+  },
+  "portable": {
+    "splashImage": "dist/assets/icons/electron.bmp"
+  },
+  "linux": {
+    "icon": "dist/assets/icons",
+    "target": ["AppImage"]
+  }
+}

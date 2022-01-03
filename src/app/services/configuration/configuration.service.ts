@@ -39,7 +39,7 @@ export class ConfigurationService {
         'Invalid configuration',
         'Cannot load configuration file'
       );
-      return;
+      this.electronService.close();
     }
 
     const conf = JSON.parse(file);
@@ -49,8 +49,9 @@ export class ConfigurationService {
     } else {
       this.electronService.showDialog(
         'Invalid configuration',
-        'Cannot load base path from configuration file'
+        'Configuration is invalid'
       );
+      this.electronService.close();
     }
   }
 

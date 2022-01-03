@@ -1,6 +1,6 @@
 export const APP_CONFIG = {
   production: true,
   environment: 'PROD',
-  configPath: './config.json',
+  configPath: 'config.json',
   basePath: '',
 };
