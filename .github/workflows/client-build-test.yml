@@ -21,4 +21,4 @@ jobs:
       - name: Run unit test
         run: npm run test:coverage
       - name: Build module
-        run: npm run ng:build
+        run: npm run ng:build # add electron build
