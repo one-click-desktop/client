@@ -32,7 +32,7 @@ Run:
 
 - `npm run electron:dev` or `npm run electron:prod` to build angular app and start electron app in specified configuration.
 
-- `npm run electron:build` will build angular app in production mode and build electron app to publishable image.
+- `npm run electron:build` will build angular app in production mode and build electron app to publishable image. NOT CONFIGURED PROPERLY YET.
 
 ## Running unit tests
 
