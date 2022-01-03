@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Client application for OneClickDesktop",
   "homepage": "https://github.com/one-click-desktop/client",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/one-click-desktop/client.git"
+  },
   "license": "MIT",
   "author": {
     "name": "Piotr Widomski",
@@ -13,7 +17,6 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "npm-run-all -p electron:serve ng:serve",
-    "release": "npm run build:prod && electron-builder build",
     "ng:serve": "ng serve -c web -o",
     "ng:build": "ng build --base-href ./",
     "ng:e2e": "ng e2e",
@@ -29,8 +32,8 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && electron . --serve",
     "electron:dev": "npm run build:dev && electron . --dev",
     "electron:prod": "npm run build:prod && electron .",
-    "electron:build": "npm run release -- --publish=never",
-    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "electron:build": "npm run build:prod && electron-builder build --publish=never",
+    "version": "cross-var echo $npm_package_version",
     "lint": "ng lint"
   },
   "private": true,
@@ -73,6 +76,7 @@
     "@typescript-eslint/eslint-plugin": "4.28.2",
     "@typescript-eslint/parser": "4.28.2",
     "chance": "^1.1.8",
+    "cross-var": "^1.1.0",
     "cypress": "^8.6.0",
     "electron": "14.1.0",
     "electron-builder": "^22.13.1",

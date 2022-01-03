@@ -11,10 +11,12 @@
     "target": ["portable"]
   },
   "portable": {
-    "splashImage": "dist/assets/icons/electron.bmp"
+    "splashImage": "dist/assets/icons/electron.bmp",
+    "artifactName": "${productName}"
   },
   "linux": {
     "icon": "dist/assets/icons",
     "target": ["AppImage"]
-  }
+  },
+  "beforePack": "./beforePack.js"
 }
