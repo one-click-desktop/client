@@ -1,6 +1,6 @@
 {
   "appId": "com.electron.${name}",
-  "productName": "OneClickDesktop Client",
+  "productName": "OneClickDesktopClient",
   "asar": true,
   "directories": {
     "output": "release/"
@@ -16,5 +16,11 @@
   "linux": {
     "icon": "dist/assets/icons",
     "target": ["AppImage"]
-  }
+  },
+  "appImage": {
+    "category": "Network"
+  },
+  "publish": ["github"],
+  "beforePack": "./builder/beforePack.js",
+  "afterAllArtifactBuild": "./builder/afterBuild.js"
 }

@@ -10,9 +10,9 @@ import * as Remote from '@electron/remote';
   providedIn: 'root',
 })
 export class ElectronService {
-  childProcess: typeof ChildProcess;
   rabbit: any;
-
+  
+  private childProcess: typeof ChildProcess;
   private remote: typeof Remote;
   private fs: typeof Fs;
   private path: typeof Path;
