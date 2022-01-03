@@ -1,11 +1,14 @@
-name: NPM Build Test
+name: "Windows Publish"
+
 on:
-  pull_request:
+  push:
     branches:
       - main
+      - "release/electron-build"
+
 jobs:
-  client-build-test:
-    runs-on: ubuntu-latest
+  client-publish-win:
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -16,9 +19,5 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: npm install
-      - name: Run lint
-        run: npm run lint
-      - name: Run unit test
-        run: npm run test:coverage
-      - name: Build module
-        run: npm run ng:build
+      - name: Publish'
+        run: npm run release
