@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Chance } from 'chance';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
+import { Config, Convert } from '@models/config';
 import { ElectronService } from '@services/electron/electron.service';
 
 import { ConfigurationService } from './configuration.service';
@@ -20,9 +21,13 @@ describe('ConfigurationService', () => {
       providers: [ElectronService],
     });
     service = TestBed.inject(ConfigurationService);
+
     electronService = mocked(TestBed.inject(ElectronService));
-    electronService.readFile.mockImplementation(() => null);
+    electronService.readFile.mockReturnValue(null);
+    electronService.writeFile.mockReturnValue(true);
     electronService.showDialog.mockImplementation();
+
+    service.config = { basePath: '', rabbitPath: '' };
   });
 
   test('should be created', () => {
@@ -46,7 +51,7 @@ describe('ConfigurationService', () => {
 
   test('getConfiguration should return set basePath', () => {
     const basePath = chance.string();
-    service.basePath = basePath;
+    service.config.basePath = basePath;
 
     const conf = ConfigurationService.getConfiguration();
 
@@ -62,32 +67,54 @@ describe('ConfigurationService', () => {
     expect(electronService.showDialog).toHaveBeenCalled();
   });
 
-  test('loadConfiguration should set basePath and rabbitPath if loaded file is correct', () => {
+  test('loadConfiguration should call showDialog if cannot convert', () => {
     const file = chance.string();
     electronService.readFile.mockReturnValueOnce(file);
-    const spy = jest
-      .spyOn(JSON, 'parse')
-      .mockReturnValueOnce({ basePath: '', rabbitPath: '' });
-    const baseSpy = jest.spyOn(service, 'basePath', 'set');
-    const rabbitSpy = jest.spyOn(service, 'rabbitPath', 'set');
+    const spy = jest.spyOn(Convert, 'toConfig').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    service.loadConfiguration();
+
+    expect(electronService.readFile).toHaveBeenCalled();
+    expect(electronService.showDialog).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  test('loadConfiguration should set config if loaded file is correct', () => {
+    const file = chance.string();
+    const config = { basePath: chance.string(), rabbitPath: chance.string() };
+    electronService.readFile.mockReturnValueOnce(file);
+    const spy = jest.spyOn(Convert, 'toConfig').mockReturnValueOnce(config);
 
     service.loadConfiguration();
 
     expect(electronService.readFile).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
-    expect(baseSpy).toHaveBeenCalled();
-    expect(rabbitSpy).toHaveBeenCalled();
+    expect(service.config).toBe(config);
   });
 
   test('loadConfiguration should call showDialog if file is not correct', () => {
     const file = chance.string();
     electronService.readFile.mockReturnValueOnce(file);
-    const spy = jest.spyOn(JSON, 'parse').mockReturnValueOnce({});
+    const spy = jest
+      .spyOn(Convert, 'toConfig')
+      .mockReturnValueOnce({} as Config);
 
     service.loadConfiguration();
 
     expect(electronService.readFile).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
+    expect(electronService.showDialog).toHaveBeenCalled();
+  });
+
+  test('set config should call showDialog if cannot write', () => {
+    electronService.writeFile.mockReturnValueOnce(false);
+    jest.spyOn(Convert, 'configToJson').mockReturnValueOnce('');
+
+    service.config = null;
+
+    expect(electronService.writeFile).toHaveBeenCalled();
     expect(electronService.showDialog).toHaveBeenCalled();
   });
 });

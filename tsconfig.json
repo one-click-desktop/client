@@ -9,7 +9,8 @@
       "@testing/*": ["src/app/testing/*"],
       "@constants/*": ["src/app/constants/*"],
       "@environments/*": ["src/environments/*"],
-      "@interceptors/*": ["src/app/interceptors/*"]
+      "@interceptors/*": ["src/app/interceptors/*"],
+      "@models/*": ["src/app/models/*"]
     },
     "outDir": "./dist/out-tsc",
     "module": "es2020",

@@ -11,7 +11,7 @@ import * as Remote from '@electron/remote';
 })
 export class ElectronService {
   rabbit: any;
-  
+
   private childProcess: typeof ChildProcess;
   private remote: typeof Remote;
   private fs: typeof Fs;
@@ -29,13 +29,26 @@ export class ElectronService {
 
   readFile(path: string, encoding: BufferEncoding): string {
     try {
-      const p = this.path.join(
-        this.remote.process.env.PORTABLE_EXECUTABLE_DIR ?? '',
+      const p = this.path?.join(
+        this.remote?.process.env.PORTABLE_EXECUTABLE_DIR ?? '',
         path
       );
       return this.fs?.readFileSync(p, encoding) ?? null;
     } catch {
       return null;
+    }
+  }
+
+  writeFile(path: string, data: string, encoding: BufferEncoding): boolean {
+    try {
+      const p = this.path?.join(
+        this.remote?.process.env.PORTABLE_EXECUTABLE_DIR ?? '',
+        path
+      );
+      this.fs?.writeFileSync(p, data, { encoding: encoding, flag: 'w' });
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -54,7 +67,7 @@ export class ElectronService {
   }
 
   close(): void {
-    this.remote.app.quit();
+    this.remote?.app?.quit();
   }
 
   get isElectronApp(): boolean {

@@ -6,6 +6,8 @@ import { Chance } from 'chance';
 import { Observable, of, Subscription } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
+import { Config } from '@models/config';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RabbitMQService } from '@services/rabbitmq/rabbitmq.service';
 import { RdpService } from '@services/rdp/rdp.service';
 import { getSessionFixture } from '@testing/fixtures';
@@ -16,6 +18,7 @@ const chance = new Chance();
 
 jest.mock('@services/rdp/rdp.service');
 jest.mock('@services/rabbitmq/rabbitmq.service');
+jest.mock('@services/configuration/configuration.service');
 
 describe('RdpConnectionModalComponent', () => {
   let component: RdpConnectionModalComponent;
@@ -23,11 +26,12 @@ describe('RdpConnectionModalComponent', () => {
   let debugElement: DebugElement;
   let rdpService: MockedObject<RdpService>;
   let rabbitService: MockedObject<RabbitMQService>;
+  let configService: MockedObject<ConfigurationService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RdpConnectionModalComponent],
-      providers: [RdpService, RabbitMQService],
+      providers: [RdpService, RabbitMQService, ConfigurationService],
     }).compileComponents();
   });
 
@@ -43,6 +47,11 @@ describe('RdpConnectionModalComponent', () => {
     rabbitService = mocked(TestBed.inject(RabbitMQService));
     rabbitService.connect.mockImplementation(() => {});
     rabbitService.disconnect.mockImplementation(() => {});
+
+    configService = mocked(TestBed.inject(ConfigurationService));
+    Object.defineProperty(configService, 'config', {
+      get: jest.fn(),
+    });
   });
 
   test('should create', () => {
@@ -120,12 +129,19 @@ describe('RdpConnectionModalComponent', () => {
     expect(error).toBeTruthy();
   });
 
-  test('should call startRdpSession on init', () => {
-    const spy = jest.spyOn(component, 'startRdpSession');
+  test('should call startRdpSession and rabbit connect on init', () => {
+    const session = getSessionFixture();
+    component.session = session;
+    const rdpSpy = jest.spyOn(component, 'startRdpSession');
+    const rabbitPath = chance.string();
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ rabbitPath } as Config);
 
     fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalled();
+    expect(rdpSpy).toHaveBeenCalled();
+    expect(rabbitService.connect).toHaveBeenCalledWith(session.id, rabbitPath);
   });
 
   test('startRdpSession should call createRdpConnection with session', () => {
