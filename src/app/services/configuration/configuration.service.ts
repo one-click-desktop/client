@@ -74,7 +74,7 @@ export class ConfigurationService {
   }
 
   get config(): Config {
-    return ConfigurationService.config;
+    return { ...ConfigurationService.config };
   }
 
   set config(config: Config) {

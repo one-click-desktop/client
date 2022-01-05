@@ -2,7 +2,6 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { Chance } from 'chance';
 import { of, Subscription, throwError } from 'rxjs';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
@@ -11,8 +10,6 @@ import { SessionStatus } from '@one-click-desktop/api-module';
 import { getMachineTypeFixture, getSessionFixture } from '@testing/fixtures';
 
 import { CreatingSessionModalComponent } from './creating-session-modal.component';
-
-const chance = new Chance();
 
 jest.mock('@one-click-desktop/api-module');
 

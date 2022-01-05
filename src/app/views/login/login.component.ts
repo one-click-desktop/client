@@ -33,7 +33,6 @@ export class LoginComponent {
           this.loggedInService.login(this.login, token.token);
         },
         (error) => {
-          console.log(error);
           this.error =
             error?.status === 401
               ? 'Login or password incorrect'

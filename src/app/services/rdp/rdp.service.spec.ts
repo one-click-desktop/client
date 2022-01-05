@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Chance } from 'chance';
 import { mocked, MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 
 import { IpAddress } from '@one-click-desktop/api-module';
@@ -9,8 +8,6 @@ import { LoggedInService } from '@services/loggedin/loggedin.service';
 import { getIpAddressFixture, getLoginFixture } from '@testing/fixtures';
 
 import { RdpService } from './rdp.service';
-
-const chance = new Chance();
 
 jest.mock('@services/electron/electron.service');
 jest.mock('@services/loggedin/loggedin.service');

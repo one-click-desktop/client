@@ -51,7 +51,7 @@ describe('ConfigurationService', () => {
 
   test('getConfiguration should return set basePath', () => {
     const basePath = chance.string();
-    service.config.basePath = basePath;
+    service.config = { ...service.config, basePath };
 
     const conf = ConfigurationService.getConfiguration();
 
@@ -91,7 +91,7 @@ describe('ConfigurationService', () => {
 
     expect(electronService.readFile).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
-    expect(service.config).toBe(config);
+    expect(service.config).toStrictEqual(config);
   });
 
   test('loadConfiguration should call showDialog if file is not correct', () => {

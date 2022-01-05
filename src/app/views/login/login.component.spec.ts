@@ -1,4 +1,3 @@
-import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
@@ -19,7 +18,7 @@ jest.mock('@one-click-desktop/api-module');
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let debugElement: DebugElement;
+
   let loggedInService: MockedObject<LoggedInService>;
   let loginService: MockedObject<LoginService>;
 
@@ -34,7 +33,6 @@ describe('LoginComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
 
     loggedInService = mocked(TestBed.inject(LoggedInService));
 

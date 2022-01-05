@@ -1,0 +1,37 @@
+<main class="settings">
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="settings-options">
+      <div class="form-outline mb-2">
+        <label class="form-label" for="loginInput">Server address</label>
+        <input
+          type="text"
+          id="basePath"
+          name="basePath"
+          class="form-control form-control-lg"
+          [(ngModel)]="config.basePath"
+          required
+        />
+      </div>
+      <div class="form-outline mb-2">
+        <label class="form-label" for="loginInput">Broker address</label>
+        <input
+          type="text"
+          id="rabbitPath"
+          name="rabbitPath"
+          class="form-control form-control-lg"
+          [(ngModel)]="config.rabbitPath"
+          required
+        />
+      </div>
+    </div>
+    <div class="settings-buttons">
+      <button
+        type="submit"
+        class="settings-save btn btn-primary"
+        [disabled]="!form.form.valid || !form.form.dirty"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</main>

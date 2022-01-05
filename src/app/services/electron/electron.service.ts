@@ -27,6 +27,18 @@ export class ElectronService {
     }
   }
 
+  get isElectronApp(): boolean {
+    return !!(window && window.process && window.process.type);
+  }
+
+  get isWindows(): boolean {
+    return this.isElectronApp && window.process.platform === 'win32';
+  }
+
+  get isLinux(): boolean {
+    return this.isElectronApp && window.process.platform === 'linux';
+  }
+
   readFile(path: string, encoding: BufferEncoding): string {
     try {
       const p = this.path?.join(
@@ -70,15 +82,8 @@ export class ElectronService {
     this.remote?.app?.quit();
   }
 
-  get isElectronApp(): boolean {
-    return !!(window && window.process && window.process.type);
-  }
-
-  get isWindows(): boolean {
-    return this.isElectronApp && window.process.platform === 'win32';
-  }
-
-  get isLinux(): boolean {
-    return this.isElectronApp && window.process.platform === 'linux';
+  relaunch(): void {
+    this.remote?.app?.relaunch();
+    this.remote?.app?.quit();
   }
 }
