@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { APP_CONFIG } from '@environments/environment';
+import { Config, Convert } from '@models/config';
 import { Configuration } from '@one-click-desktop/api-module';
 import { ElectronService } from '@services/electron/electron.service';
 
@@ -8,16 +9,15 @@ import { ElectronService } from '@services/electron/electron.service';
   providedIn: 'root',
 })
 export class ConfigurationService {
-  private static basePath: string;
+  private static config: Config;
   private static token: string;
-  private static rabbitPath: string;
 
   constructor(private electronService: ElectronService) {}
 
   static getConfiguration(): Configuration {
     return new Configuration({
       withCredentials: true,
-      basePath: ConfigurationService.basePath,
+      basePath: ConfigurationService.config.basePath,
       credentials: { bearerAuth: ConfigurationService.getToken },
     });
   }
@@ -26,13 +26,16 @@ export class ConfigurationService {
     return ConfigurationService.token;
   }
 
-  static getRabbitPath(): string {
-    return ConfigurationService.rabbitPath;
-  }
-
   loadConfiguration(): void {
     const file = this.electronService.readFile(APP_CONFIG.configPath, 'utf-8');
-    this.basePath = APP_CONFIG.basePath;
+
+    // web debug
+    if (!this.electronService.isElectronApp) {
+      ConfigurationService.config = {
+        basePath: APP_CONFIG.basePath,
+        rabbitPath: '',
+      };
+    }
 
     if (!file) {
       this.electronService.showDialog(
@@ -43,28 +46,46 @@ export class ConfigurationService {
       return;
     }
 
-    const conf = JSON.parse(file);
-    if ('basePath' in conf && 'rabbitPath' in conf) {
-      this.basePath = conf.basePath;
-      this.rabbitPath = conf.rabbitPath;
-    } else {
-      this.electronService.showDialog(
-        'Invalid configuration',
-        'Configuration is invalid'
-      );
-      this.electronService.close();
+    let conf: Config;
+    try {
+      conf = Convert.toConfig(file);
+    } catch {
+      this.configError();
+      return;
     }
+
+    if (conf.basePath && conf.rabbitPath) {
+      ConfigurationService.config = conf;
+    } else {
+      this.configError();
+    }
+  }
+
+  private configError() {
+    this.electronService.showDialog(
+      'Invalid configuration',
+      'Configuration is invalid'
+    );
+    this.electronService.close();
   }
 
   set token(token: string) {
     ConfigurationService.token = token;
   }
 
-  set basePath(basePath: string) {
-    ConfigurationService.basePath = basePath;
+  get config(): Config {
+    return { ...ConfigurationService.config };
   }
 
-  set rabbitPath(rabbitPath: string) {
-    ConfigurationService.rabbitPath = rabbitPath;
+  set config(config: Config) {
+    const data = Convert.configToJson(config);
+    if (this.electronService.writeFile(APP_CONFIG.configPath, data, 'utf-8')) {
+      ConfigurationService.config = config;
+    } else {
+      this.electronService.showDialog(
+        'Configuration save error',
+        'Could not save configuration into file'
+      );
+    }
   }
 }

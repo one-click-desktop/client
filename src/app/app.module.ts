@@ -20,6 +20,8 @@ import { MainComponent } from '@views/main/main.component';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ConfigRestartModalComponent } from './components/config-restart-modal/config-restart-modal.component';
+import { SettingsComponent } from './views/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { AppRoutingModule } from './app-routing.module';
     CreatingSessionModalComponent,
     RdpConnectionModalComponent,
     LoginComponent,
+    SettingsComponent,
+    ConfigRestartModalComponent,
   ],
   imports: [
     BrowserModule,

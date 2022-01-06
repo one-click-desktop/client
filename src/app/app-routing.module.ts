@@ -5,6 +5,7 @@ import { PathConstants } from '@constants/path-constants';
 import { HomeComponent } from '@views/home/home.component';
 import { LoginComponent } from '@views/login/login.component';
 import { MainComponent } from '@views/main/main.component';
+import { SettingsComponent } from '@views/settings/settings.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
       },
       {
         path: PathConstants.SETTINGS,
-        component: HomeComponent,
+        component: SettingsComponent,
       },
       { path: '', pathMatch: 'full', redirectTo: `/${PathConstants.LOGIN}` },
     ],

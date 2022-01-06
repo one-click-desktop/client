@@ -1,4 +1,4 @@
 {
-  "basePath": "http://localhost:5000",
+  "basePath": "https://localhost:5001",
   "rabbitPath": "amqp://localhost"
 }
