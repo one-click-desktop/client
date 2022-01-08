@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 
 import { RegexpConstants } from '@constants/regexp-constants';
 import { IpAddress, Login } from '@one-click-desktop/api-module';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { ElectronService } from '@services/electron/electron.service';
 import { LoggedInService } from '@services/loggedin/loggedin.service';
 
@@ -15,7 +16,8 @@ export class RdpService {
 
   constructor(
     private electronService: ElectronService,
-    private loggedInService: LoggedInService
+    private loggedInService: LoggedInService,
+    private configService: ConfigurationService
   ) {}
 
   createRdpConnection(address: IpAddress): Observable<void> {
@@ -59,18 +61,16 @@ export class RdpService {
   private spawnRdpProcess(address: IpAddress, login: Login): any {
     const machineAddress = `${address.address}:${address.port}`;
 
-    let cmd, args;
+    let cmd: string, args: string[];
     if (this.electronService.isWindows) {
       cmd = 'mstsc.exe';
       args = [`-v:${machineAddress}`];
     } else if (this.electronService.isLinux) {
       cmd = 'xfreerdp';
-      args = [
-        `/v:${machineAddress}`,
-        `/u:${login.login}`,
-        `/p:${login.password}`,
-        '/cert:tofu',
-      ];
+      args = [`/v:${machineAddress}`, '/cert:tofu'];
+      if (this.configService.config?.useRdpCredentials) {
+        args.push(`/u:${login.login}`, `/p:${login.password}`);
+      }
     } else {
       return null;
     }
