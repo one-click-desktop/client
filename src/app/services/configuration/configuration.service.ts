@@ -34,6 +34,7 @@ export class ConfigurationService {
       ConfigurationService.config = {
         basePath: APP_CONFIG.basePath,
         rabbitPath: '',
+        useRdpCredentials: true,
       };
     }
 
