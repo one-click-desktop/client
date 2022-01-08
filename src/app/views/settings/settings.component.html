@@ -1,6 +1,18 @@
 <main class="settings">
   <form (ngSubmit)="onSubmit()" #form="ngForm">
     <div class="settings-options">
+      <div class="form-check form-switch form-outline mb-2 align-self-baseline">
+        <input
+          type="checkbox"
+          id="rdpCredentials"
+          name="rdpCredentials"
+          class="form-check-input"
+          [(ngModel)]="config.useRdpCredentials"
+        />
+        <label class="form-check-label" for="credentialsCheckbox"
+          >Use login as RDP credentials</label
+        >
+      </div>
       <div class="form-outline mb-2">
         <label class="form-label" for="loginInput">Server address</label>
         <input

@@ -5,6 +5,7 @@ import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
 import { Config, Convert } from '@models/config';
 import { ElectronService } from '@services/electron/electron.service';
+import { getConfigFixture } from '@testing/fixtures';
 
 import { ConfigurationService } from './configuration.service';
 
@@ -27,7 +28,7 @@ describe('ConfigurationService', () => {
     electronService.writeFile.mockReturnValue(true);
     electronService.showDialog.mockImplementation();
 
-    service.config = { basePath: '', rabbitPath: '' };
+    service.config = getConfigFixture();
   });
 
   test('should be created', () => {
@@ -83,7 +84,7 @@ describe('ConfigurationService', () => {
 
   test('loadConfiguration should set config if loaded file is correct', () => {
     const file = chance.string();
-    const config = { basePath: chance.string(), rabbitPath: chance.string() };
+    const config = getConfigFixture();
     electronService.readFile.mockReturnValueOnce(file);
     const spy = jest.spyOn(Convert, 'toConfig').mockReturnValueOnce(config);
 

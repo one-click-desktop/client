@@ -2,21 +2,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Chance } from 'chance';
 import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 
 import { PathConstants } from '@constants/path-constants';
 import { Config } from '@models/config';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationService } from '@services/configuration/configuration.service';
+import { getConfigFixture } from '@testing/fixtures';
 
 import { SettingsComponent } from './settings.component';
 
 jest.mock('@services/configuration/configuration.service');
 jest.mock('@ng-bootstrap/ng-bootstrap');
 jest.mock('@angular/router');
-
-const chance = new Chance();
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -48,7 +46,7 @@ describe('SettingsComponent', () => {
       set: jest.fn(),
     });
 
-    config = { basePath: chance.string(), rabbitPath: chance.string() };
+    config = getConfigFixture();
     jest.spyOn(configService, 'config', 'get').mockReturnValueOnce(config);
   });
 
@@ -77,7 +75,7 @@ describe('SettingsComponent', () => {
   });
 
   test('onSubmit should call modalService if restart needed', () => {
-    component.config = { basePath: null, rabbitPath: null };
+    component.config = getConfigFixture();
     modalService.open.mockReturnValue(null);
 
     component.onSubmit();
@@ -86,7 +84,7 @@ describe('SettingsComponent', () => {
   });
 
   test('onSubmit should set modal config if created', () => {
-    config = { basePath: null, rabbitPath: null };
+    config = getConfigFixture();
     component.config = config;
     const modal = { componentInstance: { config: null } };
     modalService.open.mockReturnValue(modal as any);

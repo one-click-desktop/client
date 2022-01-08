@@ -1,5 +1,6 @@
 import { Chance } from 'chance';
 
+import { Config } from '@models/config';
 import {
   IpAddress,
   Login,
@@ -11,16 +12,7 @@ import {
 
 const chance = new Chance();
 
-export interface SessionFixtureParameters {
-  id?: string;
-  type?: MachineType;
-  status?: SessionStatus;
-  address?: IpAddress;
-}
-
-export function getSessionFixture(
-  parameters?: SessionFixtureParameters
-): Session {
+export function getSessionFixture(parameters?: Partial<Session>): Session {
   return {
     id: parameters?.id ?? chance.guid(),
     type: parameters?.type ?? getMachineTypeFixture(),
@@ -29,27 +21,17 @@ export function getSessionFixture(
   };
 }
 
-export interface IpAddressFixtureParameters {
-  address?: string;
-  port?: number;
-}
-
 export function getIpAddressFixture(
-  parameters?: IpAddressFixtureParameters
+  parameters?: Partial<IpAddress>
 ): IpAddress {
   return {
     address: parameters?.address ?? chance.ip(),
-    port: parameters?.port ?? chance.normal(),
+    port: parameters?.port ?? chance.natural(),
   };
 }
 
-export interface MachineTypeFixtureParameters {
-  name?: string;
-  code?: string;
-}
-
 export function getMachineTypeFixture(
-  parameters?: MachineTypeFixtureParameters
+  parameters?: Partial<MachineType>
 ): MachineType {
   return {
     name: parameters?.name ?? chance.string(),
@@ -57,28 +39,24 @@ export function getMachineTypeFixture(
   };
 }
 
-export interface MachineFixtureParameters {
-  type?: MachineType;
-  amount?: number;
-}
-
-export function getMachineFixture(
-  parameters?: MachineFixtureParameters
-): Machine {
+export function getMachineFixture(parameters?: Partial<Machine>): Machine {
   return {
     type: parameters?.type ?? getMachineTypeFixture(),
     amount: parameters?.amount ?? chance.natural(),
   };
 }
 
-export interface LoginFixtureParameters {
-  login?: string;
-  password?: string;
-}
-
-export function getLoginFixture(parameters?: LoginFixtureParameters): Login {
+export function getLoginFixture(parameters?: Partial<Login>): Login {
   return {
     login: parameters?.login ?? chance.string(),
     password: parameters?.password ?? chance.string(),
+  };
+}
+
+export function getConfigFixture(parameters?: Partial<Config>): Config {
+  return {
+    basePath: parameters?.basePath ?? chance.string(),
+    rabbitPath: parameters?.rabbitPath ?? chance.string(),
+    useRdpCredentials: parameters?.useRdpCredentials ?? chance.bool(),
   };
 }

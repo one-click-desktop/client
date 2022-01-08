@@ -8,6 +8,7 @@ import { mocked, MockedObject } from 'ts-jest/dist/utils/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import { ElectronService } from '@services/electron/electron.service';
+import { getConfigFixture } from '@testing/fixtures';
 
 import { ConfigRestartModalComponent } from './config-restart-modal.component';
 
@@ -61,7 +62,7 @@ describe('ConfigRestartModalComponent', () => {
   });
 
   test('should set config and call relaunch on restart', () => {
-    const config = { basePath: chance.string(), rabbitPath: chance.string() };
+    const config = getConfigFixture();
     component.config = config;
     const spy = jest.spyOn(configService, 'config', 'set');
 
