@@ -31,6 +31,8 @@ Configuration file contains:
 
 - Using login credentials for RDP (`useRdpCredentials`) - specifies if credentials used for login should be used for RDP connection.
 
+- Start RDP connection on session ready (`startRdp`) - specifies if app should automatically start RDP connection using platform specific client. If disabled address target machine will be displayed and user must connect on their own.
+
 ## Development
 
 First run `npm install` to install all required packages.
