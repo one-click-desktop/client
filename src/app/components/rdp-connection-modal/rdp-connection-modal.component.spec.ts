@@ -88,8 +88,29 @@ describe('RdpConnectionModalComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  test('should show self-connect when shouldConnect is false', () => {
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ startRdp: false } as Config);
+
+    fixture.detectChanges();
+
+    const selfConnect = debugElement.query(By.css('.self-connect'));
+    const connected = debugElement.query(By.css('.connected'));
+    const connecting = debugElement.query(By.css('.connecting'));
+    const error = debugElement.query(By.css('.error'));
+    expect(selfConnect).toBeTruthy();
+    expect(connected).toBeFalsy();
+    expect(connecting).toBeFalsy();
+    expect(error).toBeFalsy();
+  });
+
   test('should show connected when isConnected is true', () => {
     component.isConnected = true;
+    component.isError = false;
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ startRdp: true } as Config);
 
     fixture.detectChanges();
 
@@ -104,6 +125,9 @@ describe('RdpConnectionModalComponent', () => {
   test('should show connecting when isConnected and isError is false', () => {
     component.isConnected = false;
     component.isError = false;
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ startRdp: true } as Config);
 
     fixture.detectChanges();
 
@@ -118,6 +142,9 @@ describe('RdpConnectionModalComponent', () => {
   test('should show error when isConnected is false and isError is true', () => {
     component.isConnected = false;
     component.isError = true;
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ startRdp: true } as Config);
 
     fixture.detectChanges();
 
@@ -136,12 +163,26 @@ describe('RdpConnectionModalComponent', () => {
     const rabbitPath = chance.string();
     jest
       .spyOn(configService, 'config', 'get')
-      .mockReturnValue({ rabbitPath } as Config);
+      .mockReturnValue({ rabbitPath, startRdp: true } as Config);
 
     fixture.detectChanges();
 
     expect(rdpSpy).toHaveBeenCalled();
     expect(rabbitService.connect).toHaveBeenCalledWith(session.id, rabbitPath);
+  });
+
+  test('should not call startRdpSession on init when startRdp is false', () => {
+    const session = getSessionFixture();
+    component.session = session;
+    const rdpSpy = jest.spyOn(component, 'startRdpSession');
+    const rabbitPath = chance.string();
+    jest
+      .spyOn(configService, 'config', 'get')
+      .mockReturnValue({ rabbitPath, startRdp: false } as Config);
+
+    fixture.detectChanges();
+
+    expect(rdpSpy).toHaveBeenCalledTimes(0);
   });
 
   test('startRdpSession should call createRdpConnection with session', () => {

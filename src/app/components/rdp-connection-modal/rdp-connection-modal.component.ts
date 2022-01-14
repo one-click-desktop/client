@@ -32,6 +32,7 @@ export class RdpConnectionModalComponent
 
   isConnected: boolean;
   isError: boolean;
+  shouldConnect: boolean;
 
   rdpSessionSub: Subscription;
 
@@ -45,11 +46,16 @@ export class RdpConnectionModalComponent
   }
 
   ngOnInit(): void {
-    this.startRdpSession();
+    this.shouldConnect = this.configService.config?.startRdp;
+
     this.rabbitService.connect(
       this.session?.id,
       this.configService.config?.rabbitPath
     );
+
+    if (this.shouldConnect) {
+      this.startRdpSession();
+    }
   }
 
   startRdpSession(): void {
