@@ -27,7 +27,11 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" [disabled]="!form.form.valid" class="btn btn-primary">
+    <button
+      type="submit"
+      [disabled]="!form.form.valid || !availableTypes.length"
+      class="btn btn-primary"
+    >
       Connect
     </button>
   </div>

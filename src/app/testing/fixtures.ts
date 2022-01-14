@@ -58,5 +58,6 @@ export function getConfigFixture(parameters?: Partial<Config>): Config {
     basePath: parameters?.basePath ?? chance.string(),
     rabbitPath: parameters?.rabbitPath ?? chance.string(),
     useRdpCredentials: parameters?.useRdpCredentials ?? chance.bool(),
+    startRdp: parameters?.startRdp ?? chance.bool(),
   };
 }

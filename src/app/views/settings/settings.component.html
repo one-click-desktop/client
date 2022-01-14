@@ -4,17 +4,30 @@
       <div class="form-check form-switch form-outline mb-2 align-self-baseline">
         <input
           type="checkbox"
+          id="startRdp"
+          name="startRdp"
+          class="form-check-input"
+          [(ngModel)]="config.startRdp"
+        />
+        <label class="form-check-label" for="startRdp"
+          >Start RDP connection</label
+        >
+      </div>
+      <div class="form-check form-switch form-outline mb-2 align-self-baseline">
+        <input
+          type="checkbox"
           id="rdpCredentials"
           name="rdpCredentials"
           class="form-check-input"
           [(ngModel)]="config.useRdpCredentials"
+          [disabled]="!config.startRdp"
         />
-        <label class="form-check-label" for="credentialsCheckbox"
-          >Use login as RDP credentials</label
+        <label class="form-check-label" for="rdpCredentials"
+          >Use system login as RDP credentials</label
         >
       </div>
       <div class="form-outline mb-2">
-        <label class="form-label" for="loginInput">Server address</label>
+        <label class="form-label" for="basePath">Server address</label>
         <input
           type="text"
           id="basePath"
@@ -25,7 +38,7 @@
         />
       </div>
       <div class="form-outline mb-2">
-        <label class="form-label" for="loginInput">Broker address</label>
+        <label class="form-label" for="rabbitPath">Broker address</label>
         <input
           type="text"
           id="rabbitPath"

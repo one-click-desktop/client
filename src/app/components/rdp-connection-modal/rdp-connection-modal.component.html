@@ -10,13 +10,27 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="connected" *ngIf="isConnected && !isError; else connecting">
-    <div class="modal-body-header">RDP client started</div>
+  <div class="self-connect" *ngIf="!shouldConnect; else connected">
+    <div class="modal-body-header">Your session is ready</div>
     <div class="modal-body-content">
-      Close client or click below to end session
+      You can connect to it using your selected RDP client at
+      <span class="address">
+        {{ session?.address?.address }}:{{ session?.address?.port }}
+      </span>
+      When you're done, click below to end session.
     </div>
   </div>
 </div>
+<ng-template #connected>
+  <ng-container *ngIf="isConnected && !isError; else connecting">
+    <div class="connected">
+      <div class="modal-body-header">RDP client started</div>
+      <div class="modal-body-content">
+        Close client or click below to end session
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
 <ng-template #connecting>
   <ng-container *ngIf="!isError; else error">
     <div class="connecting">

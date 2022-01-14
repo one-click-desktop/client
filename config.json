@@ -1,5 +1,6 @@
 {
   "basePath": "http://localhost:5000",
   "rabbitPath": "amqp://localhost",
-  "useRdpCredentials": false
+  "useRdpCredentials": false,
+  "startRdp": true
 }
